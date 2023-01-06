@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+
+  lendsqr-db:
+    container_name: lendsqr-db
+    image: mysql
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+        MYSQL_DATABASE: DemoCreditDB
+        MYSQL_USER: MYSQL_USER
+        MYSQL_PASSWORD: MYSQL_PASSWORD
+    # ports:
+    #     - "9907:81"
+    volumes:
+      - ./core:/var/lib/mysql
