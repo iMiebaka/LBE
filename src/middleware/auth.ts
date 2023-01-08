@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken";
-import { User } from "../models";
-import { AdminUser } from "../models/admin/";
+// import { User } from "../models";
+// import { AdminUser } from "../models/admin/";
 import "dotenv/config"
 
 const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,11 +15,11 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 
     // decrypt the token
     if (bearerHearder != "") {
-      const publicId: any = jwt.verify(bearerHearder!, process.env.SECRET_KEY!);
-      const user = await User.findOne({ publicId: publicId.user });
-      if (user == null)
-        return res.status(403).json({ message: "Login Reqired" });
-      res.locals.userCredential = user;
+      // const publicId: any = jwt.verify(bearerHearder!, process.env.SECRET_KEY!);
+      // const user = await User.findOne({ publicId: publicId.user });
+      // if (user == null)
+      //   return res.status(403).json({ message: "Login Reqired" });
+      // res.locals.userCredential = user;
       next();
       // console.log(user, " User");
     } else {
@@ -41,13 +41,13 @@ const isLoggedInAdmin = async (req: Request, res: Response, next: NextFunction) 
 
     // decrypt the token
     if (bearerHearder != "") {
-      const publicId: any = jwt.verify(bearerHearder!, process.env.SECRET_KEY!);
-      const user = await AdminUser.findOne({ publicId: publicId.user });
-      // console.log(user, " Admin");
-      if (user == null)
-        return res.status(403).json({ message: "Login Reqired" });
+      // const publicId: any = jwt.verify(bearerHearder!, process.env.SECRET_KEY!);
+      // const user = await AdminUser.findOne({ publicId: publicId.user });
+      // // console.log(user, " Admin");
+      // if (user == null)
+      //   return res.status(403).json({ message: "Login Reqired" });
 
-      res.locals.userCredential = user;
+      // res.locals.userCredential = user;
       next();
     } else {
       return res.status(403).json({ message: "Login Reqired" });

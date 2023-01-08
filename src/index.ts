@@ -1,7 +1,7 @@
 import express, { Application } from "express"
 import cors from "cors";
 import "dotenv/config";
-import initDB from "./models"
+import initDB from "./models/init"
 import { config, logger } from "./config";
 
 
@@ -24,19 +24,15 @@ app.listen(config.server.PORT, async () => {
     initDB.raw('SELECT 1 + 1 AS result')
         .then((result) => {
             logger.info("Database", "Database Connected and open for business 🛢️");
-            try {
-                logger.info(NAMESPACE, `REST API is Running on ${config.server.PORT} 🌐`);
-                app.set("LISTENING", config.server.PORT);
-            }
-            catch (error) {
-                logger.info(NAMESPACE, `Server failed to start 😞`);
-            }
+            logger.info(NAMESPACE, `REST API is Running on ${config.server.PORT} 🌐`);
+            app.set("LISTENING", config.server.PORT);
         })
         .catch((error) => {
             logger.error("Database", `Error connecting to database: ${error}`);
+            logger.error(NAMESPACE, `Server failed to start 😞`);
         });
 
 
 });
 
-// module.exports = app
+export default app

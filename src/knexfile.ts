@@ -1,5 +1,5 @@
-import type { Knex } from "knex";
-import { config } from "../config";
+import type Knex  from "knex";
+import { config } from "./config";
 
 // Update with your config settings.
 const dbConfig: { [key: string]: Knex.Config } = {
@@ -9,15 +9,18 @@ const dbConfig: { [key: string]: Knex.Config } = {
       host: config.database.DATABASE_HOST,
       user: config.database.DATABASE_USER,
       password: config.database.DATABASE_PASSWORD,
-      database: config.database.DATABASE_NAME
+      database: config.database.DATABASE_NAME,
+      port: parseInt(config.database.DATABASE_PORT)
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
+      acquireTimeoutMillis: 10000
+      // acquireConnectionTimeout: 10000
     },
     migrations: {
       // tableName: "knex_migrations"
-      directory: "../migrations"
+      directory: "./migrations"
     }
   },
 
