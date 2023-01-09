@@ -2,9 +2,9 @@ import { Knex } from "knex";
 
 
 export async function up(knex: Knex): Promise<void> {
-    return knex.schema.createTable('statement', function (table) {
+    return knex.schema.createTable('wallet', function (table) {
         table.uuid('id').primary().notNullable().unique();
-        table.string('description').notNullable();
+        table.float('amount').notNullable();
         table.uuid('user_id').references('id').inTable('users');
         table.timestamps(true, true)
     });
