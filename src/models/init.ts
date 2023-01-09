@@ -1,5 +1,5 @@
 import knex from 'knex'
-import dbConfig from '../knexfile';
+import dbConfig from '../database/knexfile';
 
 
 /**

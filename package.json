@@ -8,9 +8,11 @@
     "build": "npx tsc",
     "dev": "nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
     "rollback": "cd src && knex migrate:rollback",
     "make-migration": "cd src && knex migrate:make",
     "run-migration": "cd src && knex migrate:latest",
+    "up": "cd && knex migrate:up",
     "seed:make": "cd src && knex seed:make",
     "seed:run": "cd src && knex seed:run"
   },

@@ -1,6 +1,7 @@
+import { debug } from "console";
 import type Knex  from "knex";
 
-import { config } from "./config";
+import { config } from "../config";
 
 // Update with your config settings.
 const dbConfig: { [key: string]: Knex.Config } = {
@@ -16,17 +17,11 @@ const dbConfig: { [key: string]: Knex.Config } = {
     pool: {
       min: 0,
       max: 6,
-      afterCreate: (conn:any, done:any) => {
-        // .... add logic here ....
-        // you must call with new connection
-        done(null, conn);
-      },
     },
-    // migrations: {
-    //   tableName: "knex_migrations",
-    //   directory: "./migrations"
-    // },
-    // },
+    debug: true,
+    migrations: {
+      tableName: "knex_migrations"
+    }
   },
 
   staging: {
@@ -43,7 +38,7 @@ const dbConfig: { [key: string]: Knex.Config } = {
     },
     migrations: {
       tableName: "knex_migrations"
-    }
+    },
   },
 
   production: {
