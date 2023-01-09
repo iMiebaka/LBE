@@ -1,11 +1,11 @@
 import "dotenv/config"
 
-const DATABASE_CLIENT = process.env.DATABASE_CLIENT || "mysql"
+const DATABASE_CLIENT = process.env.DATABASE_CLIENT || "mysql2"
 const DATABASE_HOST = process.env.DATABASE_HOST || "127.0.0.1"
 const DATABASE_USER = process.env.DATABASE_USER || "your_database_user"
-const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD || "your_database_password"
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD || "*********"
 const DATABASE_NAME = process.env.DATABASE_NAME || "DemoCreditDB"
-const DATABASE_PORT = process.env.DATABASE_PORT || "8080"
+const DATABASE_PORT = process.env.DATABASE_PORT || "33060"
 
 const PORT = process.env.PORT || 5100;
 const RUNTIME = process.env.RUNTIME || "development";
