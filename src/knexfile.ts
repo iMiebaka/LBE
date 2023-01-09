@@ -1,4 +1,5 @@
 import type Knex  from "knex";
+
 import { config } from "./config";
 
 // Update with your config settings.
@@ -13,15 +14,19 @@ const dbConfig: { [key: string]: Knex.Config } = {
       port: parseInt(config.database.DATABASE_PORT)
     },
     pool: {
-      min: 2,
-      max: 10,
-      acquireTimeoutMillis: 10000
-      // acquireConnectionTimeout: 10000
+      min: 0,
+      max: 6,
+      afterCreate: (conn:any, done:any) => {
+        // .... add logic here ....
+        // you must call with new connection
+        done(null, conn);
+      },
     },
-    migrations: {
-      // tableName: "knex_migrations"
-      directory: "./migrations"
-    }
+    // migrations: {
+    //   tableName: "knex_migrations",
+    //   directory: "./migrations"
+    // },
+    // },
   },
 
   staging: {

@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Server listening to port of God's knows what
 app.listen(config.server.PORT, async () => {
-    initDB.raw('SELECT 1 + 1 AS result')
+    await initDB.raw('SELECT 1 + 1 AS result')
         .then((result) => {
             logger.info("Database", "Database Connected and open for business 🛢️");
             logger.info(NAMESPACE, `REST API is Running on ${config.server.PORT} 🌐`);
