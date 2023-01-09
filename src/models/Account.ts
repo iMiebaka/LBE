@@ -1,4 +1,4 @@
-import knex from "./init"
+import knex from "../database/db"
 
 const Account = knex.schema.createTable('account', function(table) {
   table.increments('id').primary();

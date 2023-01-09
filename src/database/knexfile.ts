@@ -1,18 +1,27 @@
-import { debug } from "console";
-import type Knex  from "knex";
+import { Knex } from 'knex';
+import "dotenv/config"
 
-import { config } from "../config";
+interface IKnexConfig {
+  [key: string]: Knex.Config;
+}
 
-// Update with your config settings.
-const dbConfig: { [key: string]: Knex.Config } = {
+const configs: IKnexConfig = {
+  // development: {
+  //   client: process.env.CLIENT,
+  //   connection: {
+  //     filename: process.env.FILEPATH as string,
+  //   },
+  //   debug: !!process.env.DB_DEBUG,
+  //   useNullAsDefault: true,
+  // },
   development: {
-    client: config.database.DATABASE_CLIENT,
+    client: 'mysql2',
     connection: {
-      host: config.database.DATABASE_HOST,
-      user: config.database.DATABASE_USER,
-      password: config.database.DATABASE_PASSWORD,
-      database: config.database.DATABASE_NAME,
-      port: parseInt(config.database.DATABASE_PORT)
+      host: "localhost",
+      user: "root",
+      password: "MYSQL_ROOT_PASSWORD",
+      database: "DemoCreditDB",
+      port: parseInt(process.env.DATABASE_PORT || "9906")
     },
     pool: {
       min: 0,
@@ -25,41 +34,36 @@ const dbConfig: { [key: string]: Knex.Config } = {
   },
 
   staging: {
-    client: config.database.DATABASE_CLIENT,
+    client: 'postgresql',
     connection: {
-      host: config.database.DATABASE_HOST,
-      user: config.database.DATABASE_USER,
-      password: config.database.DATABASE_PASSWORD,
-      database: config.database.DATABASE_NAME
+      database: 'my_db',
+      user: 'username',
+      password: 'password',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: "knex_migrations"
+      tableName: 'knex_migrations',
     },
   },
 
   production: {
-    client: config.database.DATABASE_CLIENT,
+    client: 'postgresql',
     connection: {
-      host: config.database.DATABASE_HOST,
-      user: config.database.DATABASE_USER,
-      password: config.database.DATABASE_PASSWORD,
-      database: config.database.DATABASE_NAME
+      database: 'my_db',
+      user: 'username',
+      password: 'password',
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: "knex_migrations"
-    }
+      tableName: 'knex_migrations',
+    },
   },
-
 };
 
-
-
-export default dbConfig;
+export default configs;
