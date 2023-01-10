@@ -8,18 +8,18 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    - strategy: 
+    strategy: 
       matrix:
         node-version: [18.x, 16.x]
     
     steps:
-    - name: Checkout code ${{ matrix.node-version}}
-      uses: actions/checkout@v2
+      - name: Checkout code ${{ matrix.node-version}}
+        uses: actions/checkout@v2
 
-      with:
-        node-version: ${{ matrix.node-version}}
-    - name: Install dependencies
-      run: npm ci
+        with:
+          node-version: ${{ matrix.node-version}}
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Test
-      run: npm test
+      - name: Test
+        run: npm test
