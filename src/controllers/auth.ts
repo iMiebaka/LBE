@@ -19,7 +19,7 @@ const loginUserPut = (async (req: Request, res: Response, next: NextFunction) =>
     if (password == undefined) return res.status(400).json({ message: "password not defined" });
 
     try {
-        
+
         const user = await User.query().findOne("email", email)
         if (user == undefined) return res.status(404).json({ message: "username does not exist" });
         if (user) {
@@ -65,7 +65,7 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
         });
         if (user) {
             // sendEmail(email, "validate", otp)
-            return res.json({ message: "User created" });
+            return res.status(201).json({ message: "User created" });
         } else {
             return res.status(400).json({ message: "Cannot create user" });
         }

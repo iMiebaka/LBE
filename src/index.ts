@@ -1,27 +1,11 @@
-import express, { Application, Request, Response } from "express"
-import cors from "cors";
-import "dotenv/config";
 import initDB from "./database/db"
-import { config, logger } from "./config";
+import { config, logger, MOCK_SERVER } from "./config";
 
 
 
 const NAMESPACE = "Server"
 
-const app: Application = express();
-app.use(cors());
-app.use(express.json());
-
-
-app.get("/", (req:Request, res:Response) => {
-    res.redirect("https://documenter.getpostman.com/view/22454995/2s8Z76vp4J")
-})
-
-// Route Setup
-import { apiV1 } from "./routes/";
-
-app.use("/api/v1", apiV1);
-
+const app = MOCK_SERVER.defaultConnect()
 
 // Server listening to port of God's knows what
 app.listen(config.server.PORT, async () => {
