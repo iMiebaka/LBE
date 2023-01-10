@@ -8,8 +8,8 @@ function defaultConnect() {
     return app
 }
 
-const SERVER = {
+const MOCK_SERVER = {
     defaultConnect
 }
 
-export default SERVER
+export default MOCK_SERVER

@@ -1,17 +1,15 @@
 import { describe } from "node:test"
 import request from "supertest"
-import {Express} from 'express'
-
-mockSer
-
-let server: Express
-
-
-
 import { User } from "../models"
+import { MOCK_SERVER } from "../config"
+
+
+
+
+
 
 const user1 = {
-    id: 11111111 - 1111111 - 111111,
+    id: "11111111-1111111-111111",
     first_name: "John",
     email: "john-doe@democredit.com",
     last_name: "Doe",
@@ -19,7 +17,7 @@ const user1 = {
 }
 
 const user2 = {
-    id: 11111111 - 1111111 - 111111,
+    id: "22222222-2222222-2222222",
     email: "jane-doe@democredit.com",
     first_name: "Jane",
     last_name: "Doe",
@@ -29,36 +27,31 @@ const user2 = {
 
 let token;
 
-beforeAll(async () => {
-    server = await createServer()
-  })
+const defaultserver = MOCK_SERVER.defaultConnect()
+
 
 describe("user", () => {
     describe("add user", () => {
         it("should return 200", async () => {
-            const response = await request(server)
+            const response = await request(defaultserver)
                 .post("/api/v1/account/")
                 .send(user1)
                 .set("Accept", "application/json")
                 .expect("Content-Type", /json/)
                 .expect(201)
-                .end((err, res) => {
-                    if (err) return done(err)
-            expect(typeof response.body).toBe("object");
-            done()
-                })    
+            expect(typeof response.statusCode).toBe(200);
         })
+    })
 
-        it("should return 400", async () => {
-            const response = await request(server)
-                .post("/api/v1/account/")
-                .send(user1)
-                .set("Accept", "application/json")
-                .expect("Content-Type", /json/)
-                .expect(400);
-            expect(typeof response.body).toBe("object");
+    it("should return 400", async () => {
+        const response = await request(defaultserver)
+            .post("/api/v1/account/")
+            .send(user1)
+            .set("Accept", "application/json")
+            .expect("Content-Type", /json/)
+            .expect(400);
+        expect(typeof response.statusCode).toBe(200);
 
-        })
     })
 })
 
