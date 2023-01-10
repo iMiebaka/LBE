@@ -1,4 +1,5 @@
-<img src="https://www.lendsqr.com/assets/icons/header-logo.svg" style="text-align: center" />
+<img src="https://www.lendsqr.com/assets/icons/header-logo.svg" align="center"  />
+
 # Demo Credit by Lendsqr Backend Engineer Assessment
 
 ## Table of Contents
@@ -15,7 +16,7 @@ Demo Credit is a cunsumable API platform that let's you created a finacial featu
 On demo credit you can: create and account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th plaform comes with high level security, to make sure your funds are 💯 percent secured.
 
 ## Database <a name = "database"></a> 🏁
-<img alt="database_relationship_image">
+<img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
 The database is MySQL. The database contains for tables 
 #### hot_data 📋
