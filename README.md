@@ -15,19 +15,44 @@
 Demo Credit is a cunsumable API platform that let's you created a finacial feature
 On demo credit you can: create and account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th plaform comes with high level security, to make sure your funds are 💯 percent secured.
 
+## Tools
+
+The plaform is heavily backed the following tools:
+
+<div style="display: flex; align-items: center">
+<img src="https://knexjs.org/knex-logo.png" width="40"/> <b style="margin-left: 10px"> 
+
+[Knex](https://knexjs.org/)
+ </b>
+</div>
+<div style="display: flex; align-items: center; margin-top: 10px">
+<img src="https://img.icons8.com/color/512/typescript.png" width="40"/> <b style="margin-left: 10px"> 
+
+[Typescript](https://www.typescriptlang.org/)
+</b>
+</div>
+
+<div style="display: flex; align-items: center; margin-top: 10px">
+<img src="https://img.icons8.com/material-outlined/512/no-image.png" width="40"/> <b style="margin-left: 10px">
+
+[ObjectionJS](https://vincit.github.io/objection.js/)
+</b>
+</div>
+
 ## Database <a name = "database"></a> 🏁
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
 The database is MySQL. The database contains for tables 
-#### hot_data 📋
+#### hot_data table 📋
 > This table get all pending transactions during transfer and withdrawal
 
-#### statement 📋
+#### statement table 📋
 > This table give a describive information about a completed transaction
 
-users
-wallet
-
+#### users table 📋
+>This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password
+#### wallet table 📋
+> This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
 The two tables below are alias table to help with migration of data
 knex_migrations
 knex_migrations_lock
@@ -100,26 +125,3 @@ To set up email you'll need the smtp hostname, username and password
 
 > The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production.
 
-## Tools
-
-The plaform is heavily backed the following tools:
-
-<div style="display: flex; align-items: center">
-<img src="https://knexjs.org/knex-logo.png" width="50"/> <b style="margin-left: 10px"> 
-
-[Knex](https://knexjs.org/)
- </b>
-</div>
-<div style="display: flex; align-items: center; margin-top: 20px">
-<img src="https://img.icons8.com/color/512/typescript.png" width="50"/> <b style="margin-left: 10px"> 
-
-[Typescript](https://www.typescriptlang.org/)
-</b>
-</div>
-
-<div style="display: flex; align-items: center; margin-top: 20px">
-<img src="https://img.icons8.com/material-outlined/512/no-image.png" width="50"/> <b style="margin-left: 10px">
-
-[ObjectionJS](https://vincit.github.io/objection.js/)
-</b>
-</div>
