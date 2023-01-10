@@ -1,7 +1,13 @@
-import request from "supertest"
-import server from "../index"
-
 import { describe } from "node:test"
+import request from "supertest"
+import {Express} from 'express'
+
+mockSer
+
+let server: Express
+
+
+
 import { User } from "../models"
 
 const user1 = {
@@ -23,6 +29,10 @@ const user2 = {
 
 let token;
 
+beforeAll(async () => {
+    server = await createServer()
+  })
+
 describe("user", () => {
     describe("add user", () => {
         it("should return 200", async () => {
@@ -31,8 +41,12 @@ describe("user", () => {
                 .send(user1)
                 .set("Accept", "application/json")
                 .expect("Content-Type", /json/)
-                .expect(201);
+                .expect(201)
+                .end((err, res) => {
+                    if (err) return done(err)
             expect(typeof response.body).toBe("object");
+            done()
+                })    
         })
 
         it("should return 400", async () => {
