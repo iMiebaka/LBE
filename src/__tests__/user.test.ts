@@ -1,7 +1,8 @@
-import { describe } from "node:test"
 import request from "supertest"
 import { User } from "../models"
 import { MOCK_SERVER } from "../config"
+import { Express } from 'express';
+
 
 
 
@@ -28,25 +29,25 @@ let token;
 const defaultserver = MOCK_SERVER.defaultConnect()
 
 
-// describe("user", () => {
-//     describe("add user", () => {
-//         it("should return 200", async () => {
-//             const response = await request(defaultserver)
-//                 .post("/api/v1/account/")
-//                 .send(user1)
-//                 .set("Accept", "application/json")
-//             expect(typeof response.statusCode).toBe(200);
-//         })
-//     })
+describe("user", () => {
+    describe("add user", () => {
+        it("should return 200", async () => {
+            const response = await request(defaultserver)
+                .post("/api/v1/account/")
+                .send(user1)
+                .set("Accept", "application/json")
+            expect(typeof response.statusCode).toBe(200);
+        })
+    })
 
-//     it("should return 400", async () => {
-//         const response = await request(defaultserver)
-//             .post("/api/v1/account/")
-//             .send(user1)
-//             .set("Accept", "application/json")
-//         expect(typeof response.statusCode).toBe(400);
-//     })
-// })
+    it("should return 400", async () => {
+        const response = await request(defaultserver)
+            .post("/api/v1/account/")
+            .send(user1)
+            .set("Accept", "application/json")
+        expect(typeof response.statusCode).toBe(400);
+    })
+})
 
 describe("demo-test", () => {
     it("should return true", () => {
