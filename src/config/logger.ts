@@ -1,15 +1,19 @@
 import colors from 'colors/safe';
-const success = (namespace: string, args: string) =>
+const success = (namespace: string, args: string) => {
     console.info(colors.green(`[${timeStamp()}] [INFO] [${namespace}] ${args}`));
+}
 
-const info = (namespace: string, args: string) =>
+const info = (namespace: string, args: string) => {
     console.info(colors.blue(`[${timeStamp()}] [INFO] [${namespace}] ${args}`));
+}
 
-const error = (namespace: string, args: string) =>
+const error = (namespace: string, args: string) => {
     console.error(colors.red(`[${timeStamp()}] [ERROR] [${namespace}] ${args}`));
+}
 
-const warn = (namespace: string, args: string) =>
+const warn = (namespace: string, args: string) => {
     console.warn(colors.yellow(`[${timeStamp()}] [WARNING] [${namespace}] ${args}`));
+}
 
 const timeStamp = (): string => new Date().toISOString()
 
