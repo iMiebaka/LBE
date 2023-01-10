@@ -6,7 +6,7 @@ const DATABASE_USER = process.env.DATABASE_USER || "your_database_user"
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD || "*********"
 const DATABASE_NAME = process.env.DATABASE_NAME || "DemoCreditDB"
 const DATABASE_PORT = process.env.DATABASE_PORT || "33060"
-
+const SECRET_KEY = process.env.SECRET_KEY || "na-only-you-waka-come"
 const PORT = process.env.PORT || 5100;
 const RUNTIME = process.env.RUNTIME || "development";
 
@@ -24,7 +24,9 @@ const config = {
         PORT
     },
     PLATFORM_NAME: 'Demo Credit',
-    RUNTIME
+    RUNTIME,
+    SECRET_KEY,
+    COMMISSION: 2
 }
 
 export default config

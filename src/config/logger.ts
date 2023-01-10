@@ -1,4 +1,6 @@
 import colors from 'colors/safe';
+const success = (namespace: string, args: string) =>
+    console.info(colors.green(`[${timeStamp()}] [INFO] [${namespace}] ${args}`));
 
 const info = (namespace: string, args: string) =>
     console.info(colors.blue(`[${timeStamp()}] [INFO] [${namespace}] ${args}`));
@@ -12,6 +14,6 @@ const warn = (namespace: string, args: string) =>
 const timeStamp = (): string => new Date().toISOString()
 
 
-const logger = { warn, error, info }
+const logger = { warn, error, info, success }
 export default logger
 

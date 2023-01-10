@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 // import { User } from "../models";
 // import { AdminUser } from "../models/admin/";
 import "dotenv/config"
+import { User } from "../models";
+import { config } from "../config";
 
 const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -15,11 +17,12 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
 
     // decrypt the token
     if (bearerHearder != "") {
-      // const publicId: any = jwt.verify(bearerHearder!, process.env.SECRET_KEY!);
-      // const user = await User.findOne({ publicId: publicId.user });
-      // if (user == null)
-      //   return res.status(403).json({ message: "Login Reqired" });
-      // res.locals.userCredential = user;
+      const publicId: any = jwt.verify(bearerHearder!, config.SECRET_KEY);
+      const user = await User.query().select().where("public_id", publicId.user);
+      console.log(user.length);
+      if (user.length !== 1)
+        return res.status(403).json({ message: "Login Reqired" });
+      res.locals.userCredential = user[0];
       next();
       // console.log(user, " User");
     } else {

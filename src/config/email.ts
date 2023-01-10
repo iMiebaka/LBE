@@ -1,6 +1,7 @@
 
 const nodemailer = require("nodemailer");
 import "dotenv/config"
+import { pendingTransaction } from "../utils/staticData";
 import config from "./config";
 import logger from "./logger";
 
@@ -73,7 +74,7 @@ Best regards,
 The ${config.PLATFORM_NAME} Team
 `)
 
-const sendEmail = (user:any, init: string, otp: number) => {
+const sendEmail = (user: any, init: string, otp: number) => {
     let message: string = "";
     let subMessage: string = "";
     if (init == "reset") {
@@ -84,9 +85,13 @@ const sendEmail = (user:any, init: string, otp: number) => {
         message = validateAccountValue(otp)
         subMessage = `${config.PLATFORM_NAME} - Validate your account`
     }
+    if (init == "transfer_funds") {
+        message = pendingTransaction(otp)
+        subMessage = `${config.PLATFORM_NAME} - Transfer funds`
+    }
     if (process.env.RUNTIME == "production") {
         transporter.sendMail({
-            from: `"Miebaka from ${config.PLATFORM_NAME} 💝" <noreply@example.com>`, // sender address
+            from: `"${config.PLATFORM_NAME} Support 💰" <noreply@example.com>`, // sender address
             to: user.email, // list of receivers
             subject: subMessage, // Subject line
             html: message, // html body

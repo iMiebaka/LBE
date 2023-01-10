@@ -4,20 +4,13 @@ import "dotenv/config"
 import { logger, sendEmail } from "../config";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
-import knex from "knex";
+import knex from "../database/db";
+import { randomUUID } from "crypto";
+import User from "../models/User";
+import { ITUser } from "../interface";
+import { Wallet } from "../models";
 
 const NAMESPACE = "AUTH"
-
-interface UserModel {
-    id: string,
-    // id: string,
-    user: string,
-    email: string,
-    password: string,
-    publicId: string
-
-}
-
 
 const loginUserPut = (async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
@@ -27,20 +20,21 @@ const loginUserPut = (async (req: Request, res: Response, next: NextFunction) =>
 
     try {
 
-        const user = knex('users').select({ email })
+        const user = await User.query().where("email", email)
         if (user == null) return res.status(404).json({ message: "username does not exist" });
+        if (user.length !== 0) {
+            const userData = user[0]
 
-        // if (user != null) {
-        //     const canLogin = await bcrypt.compare(password, user.password);
-        //     if (!canLogin) return res.status(400).json({ message: "Incorrect password" });
-        //     const token = jwt.sign({ user: user.publicId }, process.env.SECRET_KEY!);
-        //     return res.status(200).json({
-        //         message: "Login successfull",
-        //         id: user.publicId, token,
-        //     });
-        // } else {
-        //     return res.status(404).json({ message: "User not found" })
-        // }
+            const canLogin = await bcrypt.compare(password, userData.password);
+            if (!canLogin) return res.status(400).json({ message: "Incorrect password" });
+            const token = jwt.sign({ user: userData.public_id }, process.env.SECRET_KEY!);
+            return res.status(200).json({
+                message: "Login successfull",
+                id: userData.public_id, token,
+            });
+        } else {
+            return res.status(404).json({ message: "User not found" })
+        }
     } catch (err: any) {
         logger.error(`${NAMESPACE} - LOGIN`, err.message)
         return res.status(500).json({ message: err.message });
@@ -50,25 +44,31 @@ const loginUserPut = (async (req: Request, res: Response, next: NextFunction) =>
 const createUserPost = (async (req: Request, res: Response, next: NextFunction) => {
     const { first_name, last_name, email, password } = req.body;
 
-    const userExist = await knex("users").select({ email })
-    if (userExist !== null)
-        return res.json({ message: "Email already exist" });
-
     try {
-        const user = await knex('books').insert({
+        const userExist = await knex("users").select().where("email", email)
+
+        if (userExist.length > 0)
+            return res.json({ message: "Email already exist" });
+
+        const hashPassword = await bcrypt.hash(password, 10)
+        const user = await User.query().insert({
+            id: v4(),
+            public_id: v4(),
             first_name,
             last_name,
             email,
-            password,
-        }
-        );
-
+            password: hashPassword
+        });
+        await Wallet.query().insert({
+            id: v4(),
+            user_id: user.id,
+            amount: 0.0,
+            account_number: Math.round(Math.random() * 1000000000),
+        });
         if (user) {
             // sendEmail(email, "validate", otp)
             return res.json({ message: "User created" });
         } else {
-            console.log();
-
             return res.status(400).json({ message: "Cannot create user" });
         }
     } catch (err: any) {
@@ -81,7 +81,7 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
 const loginUserGet = (async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-        const user = await knex("user").select({ id });
+        const user = await User.query().select().findById(id);
         if (user) {
             return res.json({ user });
         } else {

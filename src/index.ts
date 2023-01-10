@@ -14,9 +14,9 @@ app.use(express.json());
 
 
 // Route Setup
-// import { apiV1 } from "./routes/";
+import { apiV1 } from "./routes/";
 
-// app.use("/api/v1", apiV1);
+app.use("/api/v1", apiV1);
 
 
 // Server listening to port of God's knows what
