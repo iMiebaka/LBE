@@ -52,36 +52,29 @@ const configs: IKnexConfig = {
     }
   },
   staging: {
-    client: 'postgresql',
+    client: "sqlite3",
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-    },
+      filename: "./dev.sqlite3"
+    }
   },
 
   production: {
-    client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      host: config.database.DATABASE_HOST,
+      user: config.database.DATABASE_USER,
+      password: config.database.DATABASE_PASSWORD,
+      database: config.database.DATABASE_NAME,
+      port: config.database.DATABASE_PORT
     },
     pool: {
-      min: 2,
-      max: 10,
+      min: 0,
+      max: 6,
     },
+    debug: true,
     migrations: {
-      tableName: 'knex_migrations',
-    },
-  },
+      tableName: "knex_migrations"
+    }
+  }
 };
 
 export default configs;

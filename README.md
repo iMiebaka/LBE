@@ -5,7 +5,9 @@
 ## Table of Contents
 
 - [About](#about)
+- [Tools](#tools)
 - [Database](#database)
+- [Environment varaible Setup](#env)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [OTP code](#otp)
@@ -15,9 +17,10 @@
 Demo Credit is a cunsumable API platform that let's you created a finacial feature
 On demo credit you can: create and account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th plaform comes with high level security, to make sure your funds are 💯 percent secured.
 
-## Tools
+[Checkout API documentation](https://democredit-e88v.onrender.com)
+## Tools  <a name = "tools"></a> ⚒️
 
-The plaform is heavily backed the following tools:
+The plaform is heavily baked the following tools:
 
 <div style="display: flex; align-items: center">
 <img src="https://knexjs.org/knex-logo.png" width="40"/> <b style="margin-left: 10px"> 
@@ -42,6 +45,15 @@ The plaform is heavily backed the following tools:
 ## Database <a name = "database"></a> 🏁
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
+To ensure this system relies on two databases:
+Development Database
+Testing Database
+Production Database
+> Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first. 
+
+[See setup guide](#env)
+
+
 The database is MySQL. The database contains for tables 
 #### hot_data table 📋
 > This table get all pending transactions during transfer and withdrawal
@@ -53,9 +65,18 @@ The database is MySQL. The database contains for tables
 >This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password
 #### wallet table 📋
 > This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
+
 The two tables below are alias table to help with migration of data
 knex_migrations
 knex_migrations_lock
+
+Next, we need to migrate table for test database. <span style="color:red"> Make sure your change NODE_ENV to test </span>
+```sh
+npm run migrate
+```
+Next we, need to make those table available for the database. Here is the command to make the migrations. <span style="color:red"> To make this migration, you need to ensure the NODE_ENV is set to development. </span>. With than been done, you can re-run  the previous command.
+
+
 
 ## Getting Started <a name = "getting_started"></a> 🏁
 
@@ -72,7 +93,7 @@ node --version
 ```
 
 You also need a package manager like npm [See guide if not installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
-Other package manager like yarn can work fine too.
+Other package manager like yarn, works fine too.
 
 ```
 npm --version
@@ -100,6 +121,9 @@ Now the code has been pulled to your local machine, You'll have to move inside t
 cd LBE
 npm i
 ```
+
+## Environment varaible Setup 👁️ <a name = "env"></a>
+
 Now th dependencies are install, it's time to set up enviroment variables
 Inside project folder is file called: 
 > .env.example
@@ -113,9 +137,11 @@ The database will take in the host, username, port, password and database name
 ###### Email
 To set up email you'll need the smtp hostname, username and password
 
+
+[See folder stucture for more insight]()
 <!-- ## Usage <a name = "usage"></a> -->
 
-## Getting OTP <a name = "otp"></a>
+## Getting OTP <a name = "otp"></a> 🗝️
 
 ##### When do i get it?
 
