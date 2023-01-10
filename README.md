@@ -4,6 +4,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Database](#database)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
 - [OTP code](#otp)
@@ -12,6 +13,23 @@
 
 Demo Credit is a cunsumable API platform that let's you created a finacial feature
 On demo credit you can: create and account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th plaform comes with high level security, to make sure your funds are 💯 percent secured.
+
+## Database <a name = "database"></a> 🏁
+<img alt="database_relationship_image">
+
+The database is MySQL. The database contains for tables 
+#### hot_data 📋
+> This table get all pending transactions during transfer and withdrawal
+
+#### statement 📋
+> This table give a describive information about a completed transaction
+
+users
+wallet
+
+The two tables below are alias table to help with migration of data
+knex_migrations
+knex_migrations_lock
 
 ## Getting Started <a name = "getting_started"></a> 🏁
 
@@ -41,21 +59,33 @@ To get the code running local, you need to clone it from the repo.
 > For SSH
 
 ```
-git clone
+git clone git@github.com:iMiebaka/LBE.git
 ```
 
 > For HTTP
 
 ```
-git clone
+git clone https://github.com/iMiebaka/LBE.git
 ```
 
 Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the neccesary dependancies
 
 ```
-cd
+cd LBE
 npm i
 ```
+Now th dependencies are install, it's time to set up enviroment variables
+Inside project folder is file called: 
+> .env.example
+
+That file contains the sample data required by this project
+The env setup required are for secretkey, database and email (optional)
+###### Secret key
+This is private to the server, it's lengthy combination of alpha-numeric charater to secure the system. <span style="color:red"> This should not be disclosed ☠️</span>
+###### Database
+The database will take in the host, username, port, password and database name
+###### Email
+To set up email you'll need the smtp hostname, username and password
 
 <!-- ## Usage <a name = "usage"></a> -->
 
@@ -63,11 +93,11 @@ npm i
 
 ##### When do i get it?
 
-> The OTP is a means of validating user. This will be required when trying to do either transfer or withdraw funds.
+>The OTP is used to validate the user. This will be required when attempting to transfer or withdraw funds.
 
 ##### How to get it?
 
-> During development, the OTP code will be displayed on the logs, while in producation, the code will be send via registered email.
+> The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production.
 
 ## Tools
 

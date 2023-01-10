@@ -1,7 +1,54 @@
-// import request from "supertest"
-// import server from "../index"
+import request from "supertest"
+import server from "../index"
 
-// import db from "../models/init";
+import axios from "axios"
+import { describe } from "node:test"
+import { User } from "../models"
+
+const user1 = {
+    id: 11111111 - 1111111 - 111111,
+    first_name: "John",
+    email: "john-doe@democredit.com",
+    last_name: "Doe",
+    password: "11111111"
+}
+
+const user2 = {
+    id: 11111111 - 1111111 - 111111,
+    email: "jane-doe@democredit.com",
+    first_name: "Jane",
+    last_name: "Doe",
+    password: "11111111"
+}
+
+
+let token;
+
+describe("user", () => {
+    describe("add user", () => {
+        it("should return 200", async () => {
+            const response = await request(server)
+                .post("/api/v1/account/")
+                .send(user1)
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(201);
+            expect(typeof response.body).toBe("object");
+        })
+
+        it("should return 400", async () => {
+            const response = await request(server)
+                .post("/api/v1/account/")
+                .send(user1)
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(400);
+            expect(typeof response.body).toBe("object");
+
+        })
+    })
+})
+
 
 // beforeAll(async () => {
 //   await db("users").insert([
