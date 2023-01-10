@@ -1,7 +1,6 @@
 import request from "supertest"
 import server from "../index"
 
-import axios from "axios"
 import { describe } from "node:test"
 import { User } from "../models"
 
