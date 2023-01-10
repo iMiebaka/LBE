@@ -30,7 +30,7 @@ Alert: CR
 Balance: ${current}
 `)
 
-const debitAlertStatement = (current: string): string => (` 
+const debitAlertStatement = (current: number): string => (` 
 Alert: DR
 Balance: ${current}
 `)

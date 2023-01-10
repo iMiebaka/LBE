@@ -1,4 +1,4 @@
-import express, { Application } from "express"
+import express, { Application, Request, Response } from "express"
 import cors from "cors";
 import "dotenv/config";
 import initDB from "./database/db"
@@ -12,6 +12,10 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json());
 
+
+app.get("/", (req:Request, res:Response) => {
+    res.redirect("https://documenter.getpostman.com/view/22454995/2s8Z76vp4J")
+})
 
 // Route Setup
 import { apiV1 } from "./routes/";

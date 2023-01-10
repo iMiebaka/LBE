@@ -19,18 +19,16 @@ const loginUserPut = (async (req: Request, res: Response, next: NextFunction) =>
     if (password == undefined) return res.status(400).json({ message: "password not defined" });
 
     try {
-
-        const user = await User.query().where("email", email)
-        if (user == null) return res.status(404).json({ message: "username does not exist" });
-        if (user.length !== 0) {
-            const userData = user[0]
-
-            const canLogin = await bcrypt.compare(password, userData.password);
+        
+        const user = await User.query().findOne("email", email)
+        if (user == undefined) return res.status(404).json({ message: "username does not exist" });
+        if (user) {
+            const canLogin = await bcrypt.compare(password, user.password);
             if (!canLogin) return res.status(400).json({ message: "Incorrect password" });
-            const token = jwt.sign({ user: userData.public_id }, process.env.SECRET_KEY!);
+            const token = jwt.sign({ user: user.public_id }, process.env.SECRET_KEY!);
             return res.status(200).json({
                 message: "Login successfull",
-                id: userData.public_id, token,
+                id: user.public_id, token,
             });
         } else {
             return res.status(404).json({ message: "User not found" })
@@ -45,9 +43,9 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
     const { first_name, last_name, email, password } = req.body;
 
     try {
-        const userExist = await knex("users").select().where("email", email)
+        const userExist = await User.query().findOne("email", email)
 
-        if (userExist.length > 0)
+        if (userExist)
             return res.json({ message: "Email already exist" });
 
         const hashPassword = await bcrypt.hash(password, 10)
