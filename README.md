@@ -1,60 +1,94 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.manejandodatos.es%2Fwp-content%2Fuploads%2F2015%2F03%2Ftypescript.png&f=1&nofb=1&ipt=0fe4fbec79afe1edc9241b1345ff7c4a2abcb94f5596591df277ddd1c75688a6&ipo=images" alt="Bot logo"></a>
-</p>
+<img src="https://www.lendsqr.com/assets/icons/header-logo.svg" style="text-align: center" />
+# Demo Credit by Lendsqr Backend Engineer Assessment
 
-<h3 align="center">typescriptmern-boilerplate</h3>
-
----
-
-## 📝 Table of Contents
+## Table of Contents
 
 - [About](#about)
-- [How it works](#working)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [OTP code](#otp)
 
-## 🧐 About <a name = "about"></a>
+## About <a name = "about"></a> 🏦
 
-Simple setup for typescript and express
+Demo Credit is a cunsumable API platform that let's you created a finacial feature
+On demo credit you can: create and account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th plaform comes with high level security, to make sure your funds are 💯 percent secured.
 
-## 💭 How it works <a name = "working"></a>
+## Getting Started <a name = "getting_started"></a> 🏁
 
-For SSH
-```bash
-git clone git@github.com:iMiebaka/TypescriptMERN-Boilerplate.git
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+
+## Prerequisites 🖋️
+
+To run this project in development, you need node install
+This project was done using v16.13.1 but any other LTS should do.
+Run the code below to check if node is installed. it will return the version of node installed.
+
+```
+node --version
 ```
 
-For HTTP
-```bash
-git clone https://github.com/iMiebaka/TypescriptMERN-Boilerplate.git
+You also need a package manager like npm [See guide if not installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
+Other package manager like yarn can work fine too.
+
+```
+npm --version
 ```
 
+## Installing 💾
 
-### Prerequisites
+To get the code running local, you need to clone it from the repo.
 
-- Node
-- Text Editor
+> For SSH
 
-### Installing
+```
+git clone
+```
 
-```bash
+> For HTTP
+
+```
+git clone
+```
+
+Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the neccesary dependancies
+
+```
+cd
 npm i
 ```
-To run the app use the command below
-```bash
-npm run dev
-```
 
-All you have to do next is edit the .env.development to .env and added the values needed.
-PS: Do not forget to remove the .git folder so that you can commit the changes to your repo codebase
+<!-- ## Usage <a name = "usage"></a> -->
 
-## ✍️ Authors <a name = "authors"></a>
+## Getting OTP <a name = "otp"></a>
 
-- [@imiebaka](https://github.com/imiebaka) - Idea & Initial work
+##### When do i get it?
 
+> The OTP is a means of validating user. This will be required when trying to do either transfer or withdraw funds.
 
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+##### How to get it?
 
-- The Giver of life
+> During development, the OTP code will be displayed on the logs, while in producation, the code will be send via registered email.
+
+## Tools
+
+The plaform is heavily backed the following tools:
+
+<div style="display: flex; align-items: center">
+<img src="https://knexjs.org/knex-logo.png" width="50"/> <b style="margin-left: 10px"> 
+
+[Knex](https://knexjs.org/)
+ </b>
+</div>
+<div style="display: flex; align-items: center; margin-top: 20px">
+<img src="https://img.icons8.com/color/512/typescript.png" width="50"/> <b style="margin-left: 10px"> 
+
+[Typescript](https://www.typescriptlang.org/)
+</b>
+</div>
+
+<div style="display: flex; align-items: center; margin-top: 20px">
+<img src="https://img.icons8.com/material-outlined/512/no-image.png" width="50"/> <b style="margin-left: 10px">
+
+[ObjectionJS](https://vincit.github.io/objection.js/)
+</b>
+</div>
