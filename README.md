@@ -103,12 +103,14 @@ To set up email you'll need the SMTP hostname, username and password -->
 ## Database <a name = "database"></a> 🏁
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
-To ensure this system relies on two databases:
+The database is MySQL. 
+The database are of three types:
 Development Database
 Testing Database
 Production Database
-<!-- > Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first.  -->
+
 Let's create the database. You need an SQL command line for this next step.
+Simply use the code below
 ```sql
 CREATE DATABASE IF NOT EXISTS DemoCreditDB;
 ```
@@ -122,7 +124,7 @@ CREATE DATABASE IF NOT EXISTS DemoCreditDB_TEST;
 ```
 
 
-The database is MySQL. The database contains tables 
+The database contains tables 
 #### hot_data table 📋
 > This table get all pending transactions during transfer and withdrawal
 

@@ -3,7 +3,11 @@ import configs from './knexfile';
 import { Model } from 'objection';
 import { config, logger } from '../config';
 
-const db = knex(configs[config.RUNTIME || 'development']);
+
+console.log(config.RUNTIME);
+
+const dbConfig = configs[config.RUNTIME || 'development']
+const db = knex(dbConfig);
 Model.knex(db);
 
 

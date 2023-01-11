@@ -21,9 +21,9 @@ const loginUserPut = (async (req: Request, res: Response, next: NextFunction) =>
     try {
 
         const user = await User.query().findOne("email", email)
-        if (user == undefined) return res.status(404).json({ message: "username does not exist" });
+        if (user == undefined) return res.status(404).json({ message: "email does not exist" });
         if (user) {
-            const canLogin = await bcrypt.compare(password, user.password);
+            const canLogin = await bcrypt.compare(password.toString(), user.password);
             if (!canLogin) return res.status(400).json({ message: "Incorrect password" });
             const token = jwt.sign({ user: user.public_id }, process.env.SECRET_KEY!);
             return res.status(200).json({
@@ -46,7 +46,7 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
         const userExist = await User.query().findOne("email", email)
 
         if (userExist)
-            return res.json({ message: "Email already exist" });
+            return res.status(400).json({ message: "Email already exist" });
 
         const hashPassword = await bcrypt.hash(password, 10)
         const hashpin = await bcrypt.hash("1234", 10)

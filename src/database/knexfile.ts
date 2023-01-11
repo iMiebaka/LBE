@@ -13,7 +13,7 @@ const configs: IKnexConfig = {
       user: config.database.DATABASE_USER,
       password: config.database.DATABASE_PASSWORD,
       database: config.database.DATABASE_NAME,
-      port: config.database.DATABASE_PORT
+      port: config.database.DATABASE_PORT 
     },
     pool: {
       min: 0,
@@ -23,14 +23,14 @@ const configs: IKnexConfig = {
     migrations: {
       tableName: "knex_migrations"
     }
-  },
+  },  
   test: {
     client: config.database.DATABASE_CLIENT,
     connection: {
       host: config.database.DATABASE_HOST,
       user: config.database.DATABASE_USER,
       password: config.database.DATABASE_PASSWORD,
-      database: config.database.DATABASE_NAME + "_TEST",
+      database: config.database.DATABASE_NAME,
       port: config.database.DATABASE_PORT
     },
     pool: {
@@ -68,4 +68,4 @@ const configs: IKnexConfig = {
   }
 };
 
-export default configs;
+export default configs

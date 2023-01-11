@@ -8,7 +8,8 @@
     "build": "npx tsc",
     "test": "jest --watchAll --verbose",
     "dev": "nodemon src/index.ts",
-    "make-seed": "npx knex seed:make new-seed --knexfile ./src/database/knexfile.ts",
+    "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
+    "make-init": "npx knex migrate:make init --knexfile ./src/database/knexfile.ts",
     "migrate": "npx knex migrate:latest --knexfile ./src/database/knexfile.ts",
     "down": "npx knex migrate:down --knexfile ./src/database/knexfile.ts"
   },
@@ -27,7 +28,6 @@
     "node-cron": "^3.0.2",
     "nodemailer": "^6.8.0",
     "objection": "^3.0.1",
-    "supertest": "^4.0.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -44,6 +44,7 @@
     "@types/uuid": "^9.0.0",
     "sqlite": "^4.1.2",
     "jest": "^29.3.1",
+    "supertest": "^4.0.2",
     "nodemon": "^2.0.20",
     "test-db": "^1.0.0",
     "ts-jest": "^29.0.3",
