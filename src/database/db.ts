@@ -5,17 +5,16 @@ import { config, logger } from '../config';
 
 const NAMESPACE = "Database"
 
-const config_ = configs[process.env.NODE_ENV || 'development'];
 
-const db = knex(config_);
+const db = knex(configs[config.RUNTIME || 'development']);
 Model.knex(db);
 
 
-// This is recommended because of the db hosting platform used
+// This will create a database if it does not exist
 if (config.RUNTIME == "development") {
     db.raw(`CREATE DATABASE IF NOT EXISTS ${config.database.DATABASE_NAME}`)
         .then(() => {
-            console.log(NAMESPACE, `Database ${config.database.DATABASE_NAME} created or already exists.`);
+            logger.success(NAMESPACE, `Database ${config.database.DATABASE_NAME} created or already exists.`);
         })
         .catch((err) => {
             logger.error(NAMESPACE, `Error creating main database: ${err}`);
@@ -23,7 +22,7 @@ if (config.RUNTIME == "development") {
         });
     db.raw(`CREATE DATABASE IF NOT EXISTS ${config.database.DATABASE_NAME}_TEST`)
         .then(() => {
-            console.log(`Database ${config.database.DATABASE_NAME} created or already exists.`);
+            logger.success(NAMESPACE, `Database ${config.database.DATABASE_NAME}_TEST created or already exists.`);
         })
         .catch((err) => {
             logger.error(NAMESPACE, `Error creating test database: ${err}`);

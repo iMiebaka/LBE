@@ -11,7 +11,7 @@
     "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
     "migrate": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts"
   },
-  "author": "",
+  "author": "Miebaka Iwarri",
   "license": "ISC",
   "dependencies": {
     "@types/node-cron": "^3.0.7",

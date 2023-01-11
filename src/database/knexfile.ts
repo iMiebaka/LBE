@@ -1,5 +1,4 @@
 import { Knex } from 'knex';
-import "dotenv/config"
 import { config } from '../config';
 
 interface IKnexConfig {
@@ -8,14 +7,6 @@ interface IKnexConfig {
 
 const configs: IKnexConfig = {
   development: {
-    // client: 'mysql2',
-    // connection: {
-    //   host: "localhost",
-    //   user: "root",
-    //   password: "MYSQL_ROOT_PASSWORD",
-    //   database: "DemoCreditDB",
-    //   port: parseInt(process.env.DATABASE_PORT || "9906")
-    // },
     client: config.database.DATABASE_CLIENT,
     connection: {
       host: config.database.DATABASE_HOST,

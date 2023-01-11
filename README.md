@@ -89,13 +89,14 @@ Now the dependencies are installed, it's time to set up environmental variables 
 > .env.example
 
 That file contains the sample data required by this project
-The env variables required are: secret key, database and email(optional)
+The env variables required are: secret key and database configuration
+ <!-- and email(optional) -->
 ###### Secret key
 This is private to the server. It's a lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
 ###### Database
 The database will take in the host, username, port, password and database name
-###### Email
-To set up email you'll need the SMTP hostname, username and password
+<!-- ###### Email
+To set up email you'll need the SMTP hostname, username and password -->
 [See folder structure for more insight](https://github.com/iMiebaka/LBE/blob/master/.env.development)
 
 
@@ -119,7 +120,7 @@ The database is MySQL. The database contains tables
 > This table give a describive information about a completed transaction
 
 #### users table 📋
->This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password
+>This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password and pin (Default to 1234)
 #### wallet table 📋
 > This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
 
@@ -137,7 +138,7 @@ Next, we need to make those tables available for the database. Here is the comma
 ## Testing <a name = "test"></a> 🧪
 To test the workings of the project run this command
 ```sh
-npm run test
+npm test
 ```
 
 ## Starting the Server 🌐

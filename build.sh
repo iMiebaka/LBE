@@ -1,4 +1,3 @@
 npm i
+npm run knex migrate:latest
 npm run build
-knex migrate:make knex_migrations
-knex migrate:latest
