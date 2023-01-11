@@ -15,17 +15,20 @@ const creditAccount = (async (req: Request, res: Response, next: NextFunction) =
 
     if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
     try {
-        const previousAcount = await Wallet.query().select().where("user_id", res.locals.userCredential.id)
-
-        await Wallet.query().select().where("user_id", res.locals.userCredential.id).patch({
-            amount: amount + previousAcount[0].amount
-        })
-        await Statement.query().insert({
-            id: v4(),
-            user_id: res.locals.userCredential.id,
-            description: creditAlertStatement(amount + previousAcount[0].amount)
-        })
-        return res.status(201).json({ message: "Account Credited" })
+        if (+amount < 1) return res.status(400).json({ message: "Credit amount less than 1" });
+        const previousAcount = await Wallet.query().select().findOne("user_id", res.locals.userCredential.id)
+        if (previousAcount != undefined) {
+            await Wallet.query().select().where("user_id", res.locals.userCredential.id).patch({
+                amount: (+amount) + previousAcount.amount
+            })
+            await Statement.query().insert({
+                id: v4(),
+                user_id: res.locals.userCredential.id,
+                description: creditAlertStatement(amount + previousAcount.amount)
+            })
+            return res.status(201).json({ message: "Account Credited" })
+        }
+        return res.status(400).json({ message: "No transaction initiated" })
     } catch (err: any) {
         logger.error(`${NAMESPACE} - CREDIT-ACOUNT`, err.message)
         return res.status(500).json({ message: err.message });
@@ -53,7 +56,6 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
                     return res.status(400).json({ message: "Transaction Timeout" })
                 else if (transaction.status == TRANSACTION_STATE.COMPLETED)
                     return res.status(400).json({ message: "Transaction already completed" })
-
             }
 
             // Get wallet balance
@@ -106,8 +108,8 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
             if (insufficentFunds)
                 return res.status(400).json({ message: "Insufficent Balance" })
 
-            const reciever_id = await Wallet.query().select().where({ account_number: reciever_account_number })
-            if (reciever_id.length == 0)
+            const reciever_id = await Wallet.query().findOne({ account_number: reciever_account_number })
+            if (reciever_id== null)
                 return res.status(404).json({ message: "Could not find Account holder" })
 
             const code = Math.round(Math.random() * 100000)
@@ -115,11 +117,11 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
                 id: v4(),
                 user_id: res.locals.userCredential.id,
                 reciever: TRANSACTION_LEVEL.TRANSFER,
-                reciever_id: reciever_id[0].user_id,
+                reciever_id: reciever_id.user_id,
                 // otp: code,
                 amount
             })
-            const reciever = await User.query().select().findById(reciever_id[0].user_id)
+            const reciever = await User.query().select().findById(reciever_id.user_id)
             sendEmail(res.locals.userCredential.email, "transfer_funds", code)
             return res.status(201).json({ message: "OTP sent to email", hint: "Send otp as header to complete transaction", "account_holder": `${reciever?.first_name} ${reciever?.last_name}` })
         } catch (err: any) {
@@ -130,18 +132,18 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
 })
 
 const withdrawAccount = (async (req: Request, res: Response, next: NextFunction) => {
-    const { otp } = req.query;
-    if (otp) {
+    const { complete } = req.query;
+    if (complete) {
         try {
             const { pin } = req.body;
             if (pin == undefined) return res.status(400).json({ message: "pin params not defined" });
+
             
             // check if pin is correct
-            const canWithdraw = await bcrypt.compare(pin, res.locals.userCredential.pin);
+            const canWithdraw = await bcrypt.compare((pin).toString(), res.locals.userCredential.pin);
             if (!canWithdraw) return res.status(400).json({ message: "incorrect pin" });
 
-            // Get incomplet ledger transaction
-            // For double security implement an OTP
+            // Get incomplete ledger transaction
             const hotWireTransaction = await HotWireTransaction.query().select().where("status", TRANSACTION_STATE.PENDING).where("user_id", res.locals.userCredential.id)
             const transaction = hotWireTransaction[0]
 
@@ -190,6 +192,7 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
         try {
             const { amount } = req.body;
             if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
+            if (+amount < 1 ) return res.status(400).json({ message: "amount too low" });
             //  Check balance
             const insufficentFunds = await checkBalance(res.locals.userCredential.id, amount)
             if (insufficentFunds)
@@ -212,5 +215,24 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
     }
 })
 
+const checkUserBalance = (async (req: Request, res: Response) => {
+    const { id } = req.query
+    let wallet;
+    try {
 
-export { creditAccount, transferAccount, withdrawAccount }
+        if (id) {
+            wallet = Wallet.query().where("user_id", res.locals.userCredential.id)
+        }
+        else {
+            wallet = Wallet.query().findOne("user_id", res.locals.userCredential.id)
+        }
+        return res.status(200).json(wallet)
+    }
+    catch (err: any) {
+        return res.status(400).json({ message: err.message })
+    }
+
+})
+
+
+export { creditAccount, transferAccount, withdrawAccount, checkUserBalance }
