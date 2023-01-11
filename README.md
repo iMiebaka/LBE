@@ -107,9 +107,19 @@ To ensure this system relies on two databases:
 Development Database
 Testing Database
 Production Database
-> Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first. 
-
+<!-- > Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first.  -->
+Let's create the database. You need an SQL command line for this next step.
+```sql
+CREATE DATABASE IF NOT EXISTS DemoCreditDB;
+```
+NB: This name of the be the same as database name on enviroment variable
 [See setup guide](#env)
+
+Now do the same for test database, it should be same with the name database name but with _TEST added. See code below
+
+```sql
+CREATE DATABASE IF NOT EXISTS DemoCreditDB_TEST;
+```
 
 
 The database is MySQL. The database contains tables 
