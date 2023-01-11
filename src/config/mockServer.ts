@@ -1,5 +1,6 @@
 import express, { Application } from "express"
 import { apiV1 } from "../routes"
+import "./contrab";
 
 function defaultConnect() {
     const app: Application = express();

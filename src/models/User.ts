@@ -4,6 +4,7 @@ class User extends Model {
   id!: string
   public_id!: string;
   first_name!: string;
+  pin!: string;
   last_name!: string;
   password!: string;
   email!: string;

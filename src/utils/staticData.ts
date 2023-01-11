@@ -25,7 +25,7 @@ Thank you for using ${config.PLATFORM_NAME}.
 Best regards,
 The ${config.PLATFORM_NAME} Team`)
 
-const creditAlertStatement = (current: string): string => (` 
+const creditAlertStatement = (current: number): string => (` 
 Alert: CR
 Balance: ${current}
 `)

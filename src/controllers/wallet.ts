@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 import { config, logger, sendEmail } from "../config";
 import { v4 } from "uuid";
-import { Statement, User, Wallet } from "../models/";
+import { Statement, User, Wallet, HotWireTransaction } from "../models/";
 import { checkBalance, checkUser, creditAlertStatement, TRANSACTION_LEVEL, TRANSACTION_STATE } from "../utils";
-import HotData from "../models/HotData";
 import { debitAlertStatement, pendingTransaction } from "../utils/staticData";
+import bcrypt from "bcrypt";
 
 
 const NAMESPACE = "Wallet"
@@ -34,63 +34,61 @@ const creditAccount = (async (req: Request, res: Response, next: NextFunction) =
 
 const transferAccount = (async (req: Request, res: Response, next: NextFunction) => {
     const { otp } = req.query;
-    const { amount, reciever_account_number } = req.body;
-    if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
-    if (reciever_account_number == undefined) return res.status(400).json({ message: "reciever_account_number params not defined" });
 
-    if (otp !== undefined) {
+    if (otp) {
         try {
+            const { pin } = req.body;
+            if (pin == undefined) return res.status(400).json({ message: "pin params not defined" });
 
-            // Check if account is sufficent
-            const insufficentFunds = await checkBalance(res.locals.userCredential.id, parseFloat(amount))
-            if (insufficentFunds)
-                return res.status(400).json({ message: "Insufficent Balance" })
-            // Get incomplet ledger transaction
-            const hotData = await HotData.query().select().where("otp", +otp).where("user_id", res.locals.userCredential.id)
-            if (hotData.length == 0)
+            // Get incomplete ledger transaction
+            const hotWireTransaction = await HotWireTransaction.query().select().where("status", TRANSACTION_STATE.PENDING).where("user_id", res.locals.userCredential.id)
+            const transaction = hotWireTransaction[0]
+            if (transaction == null)
                 return res.status(400).json({ message: "Invalid Transaction" })
 
             // Comfirm the state of the request
             // Sent response when transaction was timeout or completed
-            if (hotData[0].status != TRANSACTION_STATE.PENDING) {
-                if (hotData[0].status == TRANSACTION_STATE.TIMEOUT)
+            if (transaction.status != TRANSACTION_STATE.PENDING) {
+                if (transaction.status == TRANSACTION_STATE.TIMEOUT)
                     return res.status(400).json({ message: "Transaction Timeout" })
-                else if (hotData[0].status == TRANSACTION_STATE.COMPLETED)
+                else if (transaction.status == TRANSACTION_STATE.COMPLETED)
                     return res.status(400).json({ message: "Transaction already completed" })
 
             }
 
             // Get wallet balance
-            const senderAcount = await Wallet.query().select().where("user_id", res.locals.userCredential.id)
+            const senderAcount = await Wallet.query().findOne("user_id", res.locals.userCredential.id)
+
             // Debit User 
             await Wallet.query().select().where("user_id", res.locals.userCredential.id).patch({
-                amount: senderAcount[0].amount - parseFloat(amount)
+                amount: senderAcount!.amount - transaction!.amount
             })
 
             // Get wallet balance
-            const recieverAcount = await Wallet.query().select().where("user_id", hotData[0].reciever_id)
+            const recieverAcount_ = await Wallet.query().where("user_id", hotWireTransaction[0].reciever_id)
+            const recieverAcount = recieverAcount_[0]
             // Credit User 
-            await Wallet.query().select().where("user_id", hotData[0].reciever_id).patch({
-                amount: parseFloat(amount) + recieverAcount[0].amount
+            await Wallet.query().select().where("user_id", hotWireTransaction[0].reciever_id).patch({
+                amount: transaction.amount + recieverAcount.amount
             })
             // Return Success
             res.status(201).json({ message: "Transfer Completed" })
 
             // Update transaction state
-            await HotData.query().select().findById(hotData[0].id).patch({
+            await HotWireTransaction.query().select().findById(hotWireTransaction[0].id).patch({
                 status: TRANSACTION_STATE.COMPLETED
             })
             // Add statement for sender
             await Statement.query().insert({
                 id: v4(),
-                description: debitAlertStatement(amount + hotData[0].amount),
+                description: debitAlertStatement(senderAcount!.amount - transaction!.amount),
                 user_id: res.locals.userCredential.id
             })
             //  Add statement for reciever
             await Statement.query().insert({
                 id: v4(),
-                description: creditAlertStatement(amount + hotData[0].amount),
-                user_id: hotData[0].reciever_id
+                description: creditAlertStatement(transaction.amount + recieverAcount.amount),
+                user_id: transaction.reciever_id
             })
         } catch (err: any) {
             logger.error(`${NAMESPACE} - TRANSFER-MONEY`, err.message)
@@ -99,6 +97,9 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
     }
 
     else {
+        const { amount, reciever_account_number } = req.body;
+        if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
+        if (reciever_account_number == undefined) return res.status(400).json({ message: "reciever_account_number params not defined" });
 
         try {
             const insufficentFunds = await checkBalance(res.locals.userCredential.id, amount)
@@ -110,12 +111,12 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
                 return res.status(404).json({ message: "Could not find Account holder" })
 
             const code = Math.round(Math.random() * 100000)
-            await HotData.query().insert({
+            await HotWireTransaction.query().insert({
                 id: v4(),
                 user_id: res.locals.userCredential.id,
                 reciever: TRANSACTION_LEVEL.TRANSFER,
                 reciever_id: reciever_id[0].user_id,
-                otp: code,
+                // otp: code,
                 amount
             })
             const reciever = await User.query().select().findById(reciever_id[0].user_id)
@@ -130,19 +131,29 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
 
 const withdrawAccount = (async (req: Request, res: Response, next: NextFunction) => {
     const { otp } = req.query;
-    if (otp !== undefined) {
+    if (otp) {
         try {
+            const { pin } = req.body;
+            if (pin == undefined) return res.status(400).json({ message: "pin params not defined" });
+            
+            // check if pin is correct
+            const canWithdraw = await bcrypt.compare(pin, res.locals.userCredential.pin);
+            if (!canWithdraw) return res.status(400).json({ message: "incorrect pin" });
+
             // Get incomplet ledger transaction
-            const hotData = await HotData.query().select().findOne("otp", +otp).where("user_id", res.locals.userCredential.id)
-            if (hotData == undefined)
+            // For double security implement an OTP
+            const hotWireTransaction = await HotWireTransaction.query().select().where("status", TRANSACTION_STATE.PENDING).where("user_id", res.locals.userCredential.id)
+            const transaction = hotWireTransaction[0]
+
+            if (transaction == undefined)
                 return res.status(400).json({ message: "Invalid Transaction" })
 
             // Comfirm the state of the request
             // Sent response when transaction was timeout or completed
-            if (hotData.status != TRANSACTION_STATE.PENDING) {
-                if (hotData.status == TRANSACTION_STATE.TIMEOUT)
+            if (transaction.status != TRANSACTION_STATE.PENDING) {
+                if (transaction.status == TRANSACTION_STATE.TIMEOUT)
                     return res.status(400).json({ message: "Transaction Timeout" })
-                else if (hotData.status == TRANSACTION_STATE.COMPLETED)
+                else if (transaction.status == TRANSACTION_STATE.COMPLETED)
                     return res.status(400).json({ message: "Transaction already completed" })
             }
 
@@ -151,21 +162,21 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
             const senderAcount = await Wallet.query().findOne("user_id", res.locals.userCredential.id)
             // Debit User 
             await Wallet.query().findOne("user_id", res.locals.userCredential.id).patch({
-                amount: senderAcount!.amount - (hotData.amount)
+                amount: senderAcount!.amount - transaction.amount
             })
-            console.log(senderAcount!.amount - (hotData.amount));
+            console.log(senderAcount!.amount - transaction.amount);
 
             // Return Success
             res.status(201).json({ message: "Withdrawal Transfer Completed" })
 
             // Update transaction statement
-            await HotData.query().findById(hotData.id).patch({
+            await HotWireTransaction.query().findById(transaction.id).patch({
                 status: TRANSACTION_STATE.COMPLETED
             })
             // Add statement for user
             await Statement.query().insert({
                 id: v4(),
-                description: debitAlertStatement(senderAcount!.amount - hotData.amount),
+                description: debitAlertStatement(senderAcount!.amount - transaction.amount),
                 user_id: res.locals.userCredential.id
             })
         } catch (err: any) {
@@ -179,21 +190,21 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
         try {
             const { amount } = req.body;
             if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
-
+            //  Check balance
             const insufficentFunds = await checkBalance(res.locals.userCredential.id, amount)
             if (insufficentFunds)
                 return res.status(400).json({ message: "Insufficent Balance" })
-            const code = Math.round(Math.random() * 100000)
-            await HotData.query().insert({
+            // const code = Math.round(Math.random() * 100000)
+            await HotWireTransaction.query().insert({
                 id: v4(),
                 user_id: res.locals.userCredential.id,
                 reciever: TRANSACTION_LEVEL.WITHDRAWAL,
                 reciever_id: res.locals.userCredential.id,
-                otp: code,
+                // otp: code,
                 amount
             })
-            sendEmail(res.locals.userCredential.email, "transfer_funds", code)
-            return res.status(201).json({ message: "OTP sent to email", hint: "Send otp as header to complete transaction", "account_holder": `self` })
+            // sendEmail(res.locals.userCredential.email, "transfer_funds", code)
+            return res.status(201).json({ message: "Enter pin to complete transaction", "account_holder": `self` })
         } catch (err: any) {
             logger.error(`${NAMESPACE} - TRANSFER-MONEY`, err.message)
             return res.status(500).json({ message: err.message });

@@ -9,11 +9,12 @@
     "dev": "nodemon src/index.ts",
     "test": "jest --watchAll --verbose",
     "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
-    "migrate": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts migrations:latest"
+    "migrate": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node-cron": "^3.0.7",
     "bcrypt": "^5.1.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
@@ -23,6 +24,7 @@
     "knex": "^2.4.0",
     "lodash": "^4.17.15",
     "mysql2": "^2.2.5",
+    "node-cron": "^3.0.2",
     "nodemailer": "^6.8.0",
     "objection": "^3.0.1",
     "supertest": "^4.0.2",

@@ -49,12 +49,14 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
             return res.json({ message: "Email already exist" });
 
         const hashPassword = await bcrypt.hash(password, 10)
+        const hashpin = await bcrypt.hash("1234", 10)
         const user = await User.query().insert({
             id: v4(),
             public_id: v4(),
             first_name,
             last_name,
             email,
+            pin: hashpin,
             password: hashPassword
         });
         await Wallet.query().insert({
