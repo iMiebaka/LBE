@@ -1,3 +1,3 @@
-npm i
-npm run migrate
+npm ci
+# npm run migrate
 npm run build
