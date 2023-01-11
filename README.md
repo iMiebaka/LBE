@@ -1,16 +1,18 @@
 <img src="https://www.lendsqr.com/assets/icons/header-logo.svg" align="center"  />
 
-# Demo Credit by Lendsqr Backend Engineer Assessment
+# Demo Credit for Lendsqr Backend Engineer Assessment
 
 ## Table of Contents
 
 - [About](#about)
 - [Tools](#tools)
 - [Database](#database)
-- [Environment varaible Setup](#env)
+- [Environment Varaibles Setup](#env)
+- [Test](#test)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
-- [OTP code](#otp)
+<!-- - [OTP code](#otp) -->
+- [Contributor](#contributor)
 
 ## About <a name = "about"></a> 🏦
 
@@ -39,42 +41,6 @@ The platform is heavily baked on the following tools:
 [ObjectionJS](https://vincit.github.io/objection.js/)
 </b>
 </div>
-
-## Database <a name = "database"></a> 🏁
-<img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
-
-To ensure this system relies on two databases:
-Development Database
-Testing Database
-Production Database
-> Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first. 
-
-[See setup guide](#env)
-
-
-The database is MySQL. The database contains tables 
-#### hot_data table 📋
-> This table get all pending transactions during transfer and withdrawal
-
-#### statement table 📋
-> This table give a describive information about a completed transaction
-
-#### users table 📋
->This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password
-#### wallet table 📋
-> This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
-
-The two tables below are alias tables to help with data migrations
-knex_migrations
-knex_migrations_lock
-
-Next, we need to migrate the table for test database. <span style="color:red"> Make sure your change NODE_ENV to test </span>
-```sh
-npm run migrate
-```
-Next, we need to make those tables available for the database. Here is the command to make the migrations. <span style="color:red"> To make this migration, you need to ensure the NODE_ENV is set to development. </span>. Now that's done, you can re-run the previous command.
-
-
 
 ## Getting Started <a name = "getting_started"></a> 🏁
 
@@ -113,6 +79,10 @@ git clone https://github.com/iMiebaka/LBE.git
 ```
 
 Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the neccesary dependancies 
+```sh
+cd LTS
+npm i
+```
 
 ## Environment Variable Setup 👁️ <a name = "env"></a>
 Now the dependencies are installed, it's time to set up environmental variables Inside the project folder is a file called: 
@@ -128,12 +98,64 @@ The database will take in the host, username, port, password and database name
 To set up email you'll need the SMTP hostname, username and password
 [See folder structure for more insight](https://github.com/iMiebaka/LBE/blob/master/.env.development)
 
-## Getting OTP <a name = "otp"></a> 🗝️
+
+## Database <a name = "database"></a> 🏁
+<img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
+
+To ensure this system relies on two databases:
+Development Database
+Testing Database
+Production Database
+> Test and Development databases are set up automatically. However, if you need to set up the enviroment variable first. 
+
+[See setup guide](#env)
+
+
+The database is MySQL. The database contains tables 
+#### hot_data table 📋
+> This table get all pending transactions during transfer and withdrawal
+
+#### statement table 📋
+> This table give a describive information about a completed transaction
+
+#### users table 📋
+>This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password
+#### wallet table 📋
+> This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
+
+The two tables below are alias tables to help with data migrations
+knex_migrations
+knex_migrations_lock
+
+Next, we need to migrate the table for test database. <span style="color:red"> Make sure your change NODE_ENV to test </span>
+```sh
+npm run migrate
+```
+Next, we need to make those tables available for the database. Here is the command to make the migrations. <span style="color:red"> To make this migration, you need to ensure the NODE_ENV is set to development. </span>. Now that's done, you can re-run the previous command.
+
+
+## Testing <a name = "test"></a> 🧪
+To test the workings of the project run this command
+```sh
+npm run test
+```
+
+## Starting the Server 🌐
+
+If your test works fine, you can now run the commannd. To get the code running locally, run the following script.
+
+```
+npm run dev
+```
+
+<!-- ## Getting OTP <a name = "otp"></a> 🗝️
 ##### When do I get it?
 
 >The OTP is used to validate the user. This will be required when attempting to transfer or withdraw funds.
 
 ##### How to get it?
 
-> The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production.
+> The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production. -->
 
+## Contributor <a name = "contributor"></a> 👨‍💻️
+[Miebaka Iwarri](https://github.com/iMiebaka)
