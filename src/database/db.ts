@@ -1,10 +1,8 @@
 import knex from 'knex';
 import configs from './knexfile';
 import { Model } from 'objection';
-import { config, logger } from '../config';
+import { config } from '../config';
 
-
-console.log(config.RUNTIME);
 
 const dbConfig = configs[config.RUNTIME || 'development']
 const db = knex(dbConfig);

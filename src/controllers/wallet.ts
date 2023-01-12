@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { logger } from "../config";
 import { v4 } from "uuid";
 import { Statement, User, Wallet, HotWireTransaction } from "../models/";
-import { checkBalance, creditAlertStatement,debitAlertStatement, TRANSACTION_LEVEL, TRANSACTION_STATE } from "../utils";
+import { checkBalance, creditAlertStatement, debitAlertStatement, TRANSACTION_LEVEL, TRANSACTION_STATE } from "../utils";
 import bcrypt from "bcrypt";
 
 
@@ -40,10 +40,10 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
         try {
             const { pin } = req.body;
             if (pin == undefined) return res.status(400).json({ message: "pin params not defined" });
-               // check if pin is correct
-               const canWithdraw = await bcrypt.compare((pin).toString(), res.locals.userCredential.pin);
-               if (!canWithdraw) return res.status(400).json({ message: "incorrect pin" });
-   
+            // check if pin is correct
+            const canWithdraw = await bcrypt.compare((pin).toString(), res.locals.userCredential.pin);
+            if (!canWithdraw) return res.status(400).json({ message: "incorrect pin" });
+
             // Get incomplete ledger transaction
             const hotWireTransaction = await HotWireTransaction.query().select().where("status", TRANSACTION_STATE.PENDING).where("user_id", res.locals.userCredential.id)
             const transaction = hotWireTransaction[0]
@@ -61,24 +61,22 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
 
             // Get wallet balance
             const senderAcount = await Wallet.query().findOne("user_id", res.locals.userCredential.id)
-
             // Debit User 
-            await Wallet.query().select().where("user_id", res.locals.userCredential.id).patch({
+            await Wallet.query().where("user_id", res.locals.userCredential.id).patch({
                 amount: senderAcount!.amount - transaction!.amount
             })
+            console.log(senderAcount);
 
             // Get wallet balance
-            const recieverAcount_ = await Wallet.query().where("user_id", hotWireTransaction[0].reciever_id)
-            const recieverAcount = recieverAcount_[0]
+            const recieverAcount = await Wallet.query().findOne("user_id", transaction.reciever_id)
             // Credit User 
-            await Wallet.query().select().where("user_id", hotWireTransaction[0].reciever_id).patch({
-                amount: transaction.amount + recieverAcount.amount
+            await Wallet.query().where("user_id", transaction.reciever_id).patch({
+                amount: transaction.amount + recieverAcount!.amount
             })
-            // Return Success
-            res.status(201).json({ message: "Transfer Completed" })
+            console.log(recieverAcount);
 
             // Update transaction state
-            await HotWireTransaction.query().select().findById(hotWireTransaction[0].id).patch({
+            await HotWireTransaction.query().select().findById(transaction.id).patch({
                 status: TRANSACTION_STATE.COMPLETED
             })
             // Add statement for sender
@@ -90,9 +88,11 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
             //  Add statement for reciever
             await Statement.query().insert({
                 id: v4(),
-                description: creditAlertStatement(transaction.amount + recieverAcount.amount),
+                description: creditAlertStatement(recieverAcount!.amount),
                 user_id: transaction.reciever_id
             })
+            // Return Success
+            res.status(201).json({ message: "Transfer Completed" })
         } catch (err: any) {
             logger.error(`${NAMESPACE} - TRANSFER-MONEY`, err.message)
             return res.status(500).json({ message: err.message });
@@ -103,15 +103,15 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
         const { amount, reciever_account_number } = req.body;
         if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
         if (reciever_account_number == undefined) return res.status(400).json({ message: "reciever_account_number params not defined" });
-        if (+amount < 1 ) return res.status(400).json({ message: "amount too low" });
+        if (+amount < 1) return res.status(400).json({ message: "amount too low" });
 
         try {
             const insufficentFunds = await checkBalance(res.locals.userCredential.id, amount)
             if (insufficentFunds)
                 return res.status(400).json({ message: "Insufficent Balance" })
 
-            const reciever_id = await Wallet.query().findOne({ account_number: reciever_account_number })
-            if (reciever_id== null)
+            const reciever_id = await Wallet.query().findOne("account_number", reciever_account_number)
+            if (reciever_id == null)
                 return res.status(404).json({ message: "Could not find Account holder" })
 
             // const code = Math.round(Math.random() * 100000)
@@ -123,9 +123,9 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
                 // otp: code,
                 amount
             })
-            const reciever = await User.query().select().findById(reciever_id.user_id)
+            const reciever = await User.query().findById(reciever_id.user_id)
             // sendEmail(res.locals.userCredential.email, "transfer_funds", code)
-            return res.status(201).json({ message: "Enter pin to complete transaction", "account_holder": `self` })
+            return res.status(201).json({ message: "Enter pin to complete transaction", "account_holder": `${reciever?.last_name} ${reciever?.first_name}` })
         } catch (err: any) {
             logger.error(`${NAMESPACE} - TRANSFER-MONEY`, err.message)
             return res.status(500).json({ message: err.message });
@@ -140,7 +140,7 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
             const { pin } = req.body;
             if (pin == undefined) return res.status(400).json({ message: "pin params not defined" });
 
-            
+
             // check if pin is correct
             const canWithdraw = await bcrypt.compare((pin).toString(), res.locals.userCredential.pin);
             if (!canWithdraw) return res.status(400).json({ message: "incorrect pin" });
@@ -194,7 +194,7 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
         try {
             const { amount } = req.body;
             if (amount == undefined) return res.status(400).json({ message: "amount params not defined" });
-            if (+amount < 1 ) return res.status(400).json({ message: "amount too low" });
+            if (+amount < 1) return res.status(400).json({ message: "amount too low" });
             //  Check balance
             const insufficentFunds = await checkBalance(res.locals.userCredential.id, amount)
             if (insufficentFunds)

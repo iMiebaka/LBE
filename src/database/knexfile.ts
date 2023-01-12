@@ -19,7 +19,7 @@ const configs: IKnexConfig = {
       min: 0,
       max: 6,
     },
-    debug: true,
+    debug: false,
     migrations: {
       tableName: "knex_migrations"
     }

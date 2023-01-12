@@ -18,7 +18,7 @@
 
 Demo Credit is a consumable API platform that lets you create a financial future. On Demo Credit you can: create an account with zero charges, transfer funds, and withdraw funds with zero delays. The platform comes with high-level security, to make sure your funds are 💯 percent secured.
 
-[Checkout API documentation](https://democredit-e88v.onrender.com)
+[Checkout API documentation](https://demo-credit-nzo5.onrender.com)
 ## Tools  <a name = "tools"></a> ⚒️
 The platform is heavily baked on the following tools:
 
