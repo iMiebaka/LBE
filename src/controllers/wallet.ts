@@ -62,18 +62,21 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
             // Get wallet balance
             const senderAcount = await Wallet.query().findOne("user_id", res.locals.userCredential.id)
             // Debit User 
+            const senderBalance = +(senderAcount!.amount - transaction!.amount).toFixed(2)
             await Wallet.query().where("user_id", res.locals.userCredential.id).patch({
-                amount: senderAcount!.amount - transaction!.amount
+                amount: senderBalance
             })
             console.log(senderAcount);
 
             // Get wallet balance
             const recieverAcount = await Wallet.query().findOne("user_id", transaction.reciever_id)
             // Credit User 
+            const recieverBalance = +(transaction.amount + recieverAcount!.amount).toFixed(2)
             await Wallet.query().where("user_id", transaction.reciever_id).patch({
-                amount: transaction.amount + recieverAcount!.amount
+                amount: recieverBalance
             })
-            console.log(recieverAcount);
+            console.log(recieverBalance);
+            console.log(senderBalance);
 
             // Update transaction state
             await HotWireTransaction.query().select().findById(transaction.id).patch({
@@ -82,13 +85,13 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
             // Add statement for sender
             await Statement.query().insert({
                 id: v4(),
-                description: debitAlertStatement(senderAcount!.amount - transaction!.amount),
+                description: debitAlertStatement(senderBalance),
                 user_id: res.locals.userCredential.id
             })
             //  Add statement for reciever
             await Statement.query().insert({
                 id: v4(),
-                description: creditAlertStatement(recieverAcount!.amount),
+                description: creditAlertStatement(recieverBalance),
                 user_id: transaction.reciever_id
             })
             // Return Success

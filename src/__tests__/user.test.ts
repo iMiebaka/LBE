@@ -1,7 +1,6 @@
 import request from "supertest"
 import { HotWireTransaction, Statement, User, Wallet } from "../models"
 import { defaultConnect } from "../config"
-import knex from "knex"
 import { TEST_USER } from "../utils"
 
 

@@ -5,7 +5,7 @@ interface IKnexConfig {
   [key: string]: Knex.Config;
 }
 
-const configs: IKnexConfig = {
+const dbStages: IKnexConfig = {
   development: {
     client: config.database.DATABASE_CLIENT,
     connection: {
@@ -68,4 +68,4 @@ const configs: IKnexConfig = {
   }
 };
 
-export default configs
+export default dbStages
