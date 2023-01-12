@@ -1,7 +1,7 @@
 import { Wallet, User } from "../models";
 
 import { config } from "../config"
-import { creditAlertStatement } from "./staticData";
+import { creditAlertStatement, TEST_USER } from "./staticData";
 
 
 const TRANSACTION_LEVEL = {
@@ -34,5 +34,6 @@ export {
     checkBalance, checkUser,
     creditAlertStatement,
     TRANSACTION_LEVEL,
-    TRANSACTION_STATE
+    TRANSACTION_STATE,
+    TEST_USER
 }

@@ -2,29 +2,12 @@ import request from "supertest"
 import { HotWireTransaction, Statement, User, Wallet } from "../models"
 import { defaultConnect } from "../config"
 import knex from "knex"
-import { after } from "node:test"
+import { TEST_USER } from "../utils"
 
 
 
-
-
-const user1 = {
-    id: "11111111-1111111-111111",
-    first_name: "John",
-    email: "john-doe@democredit.com",
-    last_name: "Doe",
-    password: "11111111",
-    account: ""
-}
-
-const user2 = {
-    id: "22222222-2222222-2222222",
-    email: "jane-doe@democredit.com",
-    first_name: "Jane",
-    last_name: "Doe",
-    password: "22222222",
-    account: ""
-}
+const user1 = TEST_USER.user1
+const user2 = TEST_USER.user2
 
 
 let token: string;
@@ -183,7 +166,7 @@ describe("user", () => {
     })
 
 
-    describe("transfer funds", () => {
+    describe("withdraw funds", () => {
         it("withdrawal less than 1", async () => {
             const transaction = { amount: 0 }
             const response = await request(defaultserver)
@@ -214,6 +197,15 @@ describe("user", () => {
             expect(response.body.message).toBe("Enter pin to complete transaction");
         })
 
+        it("successfull withdrawal with wrong pin (finish)", async () => {
+            const data = { pin: 12344 }
+            const response = await request(defaultserver)
+                .put("/api/v1/transaction?complete=true")
+                .send(data)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("incorrect pin");
+        })
         it("successfull withdrawal (finish)", async () => {
             const data = { pin: 1234 }
             const response = await request(defaultserver)
@@ -224,6 +216,65 @@ describe("user", () => {
             expect(response.body.message).toBe("Withdrawal Transfer Completed");
         })
     })
+
+        describe("transfer funds", () => {
+            beforeAll( async() =>{
+              const walletOne =  await Wallet.query().findOne("user_id", user1.id)
+              user1.account = walletOne!.account_number 
+              const walletTwo =  await Wallet.query().findOne("user_id", user2.id)
+              user2.account = walletTwo!.account_number 
+            })
+            it("transfer less than 1", async () => {
+                const transaction = { amount: 0, reciever_account_number:user2.account }
+                const response = await request(defaultserver)
+                    .patch("/api/v1/transaction/")
+                    .send(transaction)
+                    .set("Accept", "application/json")
+                    .set("Authorization", `Bearer ${token}`)
+                expect(response.body.message).toBe("amount too low");
+            })
+    
+            it("transfer exact balance", async () => {
+                const transaction = { amount: 1000, reciever_account_number:user2.account }
+                const response = await request(defaultserver)
+                .patch("/api/v1/transaction/")
+                .send(transaction)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+                expect(response.body.message).toBe("Insufficent Balance");
+            })
+            
+            it("successfull transfer (start)", async () => {
+                const transaction = { amount: 100, reciever_account_number:user2.account }
+                const response = await request(defaultserver)
+                    .patch("/api/v1/transaction/")
+                    .send(transaction)
+                    .set("Accept", "application/json")
+                    .set("Authorization", `Bearer ${token}`)
+                expect(response.body.message).toBe("Enter pin to complete transaction");
+            })
+    
+            it("successfull transfer with wrong pin (finish)", async () => {
+                const data = { pin: 12344 }
+                const response = await request(defaultserver)
+                    .patch("/api/v1/transaction?complete=true")
+                    .send(data)
+                    .set("Accept", "application/json")
+                    .set("Authorization", `Bearer ${token}`)
+                expect(response.body.message).toBe("incorrect pin");
+            })
+            it("successfull transfer (finish)", async () => {
+                const data = { pin: 1234 }
+                const response = await request(defaultserver)
+                    .patch("/api/v1/transaction?complete=true")
+                    .send(data)
+                    .set("Accept", "application/json")
+                    .set("Authorization", `Bearer ${token}`)
+                expect(response.body.message).toBe("Transfer Completed");
+            })
+
+        })
+
 
     afterAll(async () => {
         await HotWireTransaction.query().where("user_id", user1.id).delete()

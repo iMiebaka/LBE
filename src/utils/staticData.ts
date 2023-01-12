@@ -35,4 +35,26 @@ Alert: DR
 Balance: ${current}
 `)
 
-export { creditAlertStatement, pendingTransaction, debitAlertStatement }
+const user1 = {
+    id: "11111111-1111111-111111",
+    first_name: "John",
+    email: "john-doe@democredit.com",
+    last_name: "Doe",
+    password: "11111111",
+    account: 0
+}
+
+const user2 = {
+    id: "22222222-2222222-2222222",
+    email: "jane-doe@democredit.com",
+    first_name: "Jane",
+    last_name: "Doe",
+    password: "22222222",
+    account: 0
+}
+const TEST_USER = {
+    user1,
+    user2,
+}
+
+export { creditAlertStatement, pendingTransaction, debitAlertStatement, TEST_USER }

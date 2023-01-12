@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import { logger, sendEmail } from "../config";
+import { config, logger, sendEmail } from "../config";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
 import knex from "../database/db";
@@ -9,12 +9,12 @@ import { randomUUID } from "crypto";
 import User from "../models/User";
 import { ITUser } from "../interface";
 import { Wallet } from "../models";
+import { TEST_USER } from "../utils";
 
 const NAMESPACE = "AUTH"
 
 const loginUserPut = (async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-
     if (email == undefined) return res.status(400).json({ message: "email not defined" });
     if (password == undefined) return res.status(400).json({ message: "password not defined" });
 
@@ -43,6 +43,8 @@ const createUserPost = (async (req: Request, res: Response, next: NextFunction) 
     const { first_name, last_name, email, password } = req.body;
 
     try {
+        if (config.RUNTIME != "test" && (TEST_USER.user1.email == email || TEST_USER.user2.email == email))
+            return res.status(400).json({ message: "Cannot use test user emails" });
         const userExist = await User.query().findOne("email", email)
 
         if (userExist)
