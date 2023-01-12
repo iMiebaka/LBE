@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken"
-import { config, logger, sendEmail } from "../config";
+import { logger } from "../config";
 import { v4 } from "uuid";
 import { Statement, User, Wallet, HotWireTransaction } from "../models/";
-import { checkBalance, checkUser, creditAlertStatement, TRANSACTION_LEVEL, TRANSACTION_STATE } from "../utils";
-import { debitAlertStatement, pendingTransaction } from "../utils/staticData";
+import { checkBalance, creditAlertStatement,debitAlertStatement, TRANSACTION_LEVEL, TRANSACTION_STATE } from "../utils";
 import bcrypt from "bcrypt";
 
 
@@ -116,7 +114,7 @@ const transferAccount = (async (req: Request, res: Response, next: NextFunction)
             if (reciever_id== null)
                 return res.status(404).json({ message: "Could not find Account holder" })
 
-            const code = Math.round(Math.random() * 100000)
+            // const code = Math.round(Math.random() * 100000)
             await HotWireTransaction.query().insert({
                 id: v4(),
                 user_id: res.locals.userCredential.id,

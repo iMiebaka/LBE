@@ -1,13 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import { config, logger, sendEmail } from "../config";
+import { config, logger } from "../config";
 import { v4 } from "uuid";
 import bcrypt from "bcrypt";
-import knex from "../database/db";
-import { randomUUID } from "crypto";
 import User from "../models/User";
-import { ITUser } from "../interface";
 import { Wallet } from "../models";
 import { TEST_USER } from "../utils";
 
