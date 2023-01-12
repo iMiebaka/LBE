@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node build",
+    "start": "node build",
     "build": "npx tsc",
     "test": "jest --watchAll --verbose",
     "dev": "nodemon src/index.ts",
