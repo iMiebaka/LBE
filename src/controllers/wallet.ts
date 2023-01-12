@@ -224,12 +224,11 @@ const checkUserBalance = (async (req: Request, res: Response) => {
     const { id } = req.query
     let wallet;
     try {
-
         if (id) {
-            wallet = Wallet.query().where("user_id", res.locals.userCredential.id)
+            wallet = Wallet.query().findOne("user_id", res.locals.userCredential.id)
         }
         else {
-            wallet = Wallet.query().findOne("user_id", res.locals.userCredential.id)
+            wallet = Wallet.query().where("user_id", res.locals.userCredential.id)
         }
         return res.status(200).json(wallet)
     }
