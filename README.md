@@ -6,11 +6,10 @@
 
 - [About](#about)
 - [Tools](#tools)
+- [Getting Started](#getting_started)
 - [Database](#database)
 - [Environment Varaibles Setup](#env)
 - [Test](#test)
-- [Getting Started](#getting_started)
-- [Usage](#usage)
 <!-- - [OTP code](#otp) -->
 - [Contributor](#contributor)
 
@@ -55,8 +54,6 @@ Run the code below to check if Node is installed. it will return the version of 
 node --version
 ```
 
-You also need a package manager like npm [See guide if not installed](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/). yarn, works fine too.
-
 ```
 npm --version
 ```
@@ -76,21 +73,21 @@ git clone git@github.com:iMiebaka/LBE.git
 git clone https://github.com/iMiebaka/LBE.git
 ```
 
-Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the necessary dependencies. 
+Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the dependencies. 
 ```sh
 cd LTS
 npm i
 ```
 
 ## Environment Variable Setup 👁️ <a name = "env"></a>
-Now the dependencies are installed, it's time to set up environmental variables Inside the project folder is a file called:
+Now the dependencies are installed, it's time to set up environment variables Inside the project folder is a file called:
 > .env.example
 
 That file contains the sample data required by this project
 The env variables required are: the secret key and database configuration
  <!-- and email(optional) -->
 ###### Secret key
-This is private to the server. It's a lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
+This is private to the server. It should be lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
 ###### Database
 The database will take in the host, username, port, password and database name
 <!-- ###### Email
@@ -99,7 +96,7 @@ To set up email you'll need the SMTP hostname, username and password -->
 
 
 ## Database <a name = "database"></a> 🛢️
-The database used is MySQL. This is the relationship diagram.
+The database used is MySQL. And here is the relationship diagram.
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
 The database contains the following tables and fields.
@@ -112,21 +109,22 @@ The database contains the following tables and fields.
 #### users table 📋
 >This table contains valuable details about the user. These details are added when the account is created. i.e first name, last name, email, password and pin (Default to 1234)
 #### wallet table 📋
-> This table automatically generates when a user signs up on the platform. Details include: account number, amount (Default to 0.0), user reference
+> This table is automatically generates when a user signs up on the platform. Details include: account number, amount (Default to 0.0), user reference
 
 NB: Knex generates two tables extra alias tables to help with data migrations
 knex_migrations
 knex_migrations_lock
 
-Next, we need to migrate the tables to the database <span style="color:red"> Make sure your set NODE_ENV </span>
+Next, we need to migrate the tables to the database. Use the command below. <span style="color:red"> Make sure your set NODE_ENV </span>
 ```sh
 npm run migrate
 ```
 
 ## Testing <a name = "test"></a> 🧪
-This project testing is broken into two stages: One is to test database connection. and the other to test the user activities.
-The first test check if the database connection is established, this is important because without it data persistence cannot work.
-The second test creates two tests the user account, log in, funds the wallet, withdraw amounts, and transfer funds. This test depends on the success of the first test.
+This project testing is broken into two stages: One is to test database connection, and the other to test the user activities.
+The first test check if the database connection is established. This is important because without it data persistence cannot work.
+The second test does the following: creates two tests user account, log in, funds the wallet, withdraw amounts, and transfer funds. This test depends on the success of the first test.
+To see the test in action run the command below:
 ```sh
 npm test
 ```
