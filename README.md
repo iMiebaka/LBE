@@ -6,11 +6,10 @@
 
 - [About](#about)
 - [Tools](#tools)
+- [Getting Started](#getting_started)
 - [Database](#database)
 - [Environment Varaibles Setup](#env)
 - [Test](#test)
-- [Getting Started](#getting_started)
-- [Usage](#usage)
 <!-- - [OTP code](#otp) -->
 - [Contributor](#contributor)
 
