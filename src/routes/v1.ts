@@ -5,7 +5,7 @@ import { loginUserPut, loginUserGet, createUserPost, creditAccount, transferAcco
 
 const router = Router();
 
-router.route("/transaction").post(isLoggedIn, creditAccount).patch(isLoggedIn, transferAccount).put(isLoggedIn, withdrawAccount);
+router.route("/transaction").post(isLoggedIn, creditAccount).patch(isLoggedIn, transferAccount).put(isLoggedIn, withdrawAccount).get(isLoggedIn, checkUserBalance);
 router.route("/account").post(createUserPost).put(loginUserPut).get(isLoggedIn, loginUserGet).get(isLoggedIn, checkUserBalance)
 router.route("/logout").get(isLoggedIn, ((req, res) => {
     res.json({ message: "logout" })

@@ -13,8 +13,6 @@ cron.schedule('* * * * *', async () => {
     const diffMs = transaction.created_at.getTime() - new Date().getDate()
     const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
     if (diffMins > 1) {
-      console.log(diffMins);
-      
       // await HotWireTransaction.query().findById(transaction.id).patch({
       //   status: TRANSACTION_STATE.TIMEOUT
       // }).where("status", TRANSACTION_STATE.PENDING)

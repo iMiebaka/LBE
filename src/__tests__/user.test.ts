@@ -216,63 +216,71 @@ describe("user", () => {
         })
     })
 
-        describe("transfer funds", () => {
-            beforeAll( async() =>{
-              const walletOne =  await Wallet.query().findOne("user_id", user1.id)
-              user1.account = walletOne!.account_number 
-              const walletTwo =  await Wallet.query().findOne("user_id", user2.id)
-              user2.account = walletTwo!.account_number 
-            })
-            it("transfer less than 1", async () => {
-                const transaction = { amount: 0, reciever_account_number:user2.account }
-                const response = await request(defaultserver)
-                    .patch("/api/v1/transaction/")
-                    .send(transaction)
-                    .set("Accept", "application/json")
-                    .set("Authorization", `Bearer ${token}`)
-                expect(response.body.message).toBe("amount too low");
-            })
-    
-            it("transfer exact balance", async () => {
-                const transaction = { amount: 1000, reciever_account_number:user2.account }
-                const response = await request(defaultserver)
+    describe("transfer funds", () => {
+        beforeAll(async () => {
+            const walletOne = await Wallet.query().findOne("user_id", user1.id)
+            user1.account = walletOne!.account_number
+            const walletTwo = await Wallet.query().findOne("user_id", user2.id)
+            user2.account = walletTwo!.account_number
+        })
+        it("transfer less than 1", async () => {
+            const transaction = { amount: 0, reciever_account_number: user2.account }
+            const response = await request(defaultserver)
                 .patch("/api/v1/transaction/")
                 .send(transaction)
                 .set("Accept", "application/json")
                 .set("Authorization", `Bearer ${token}`)
-                expect(response.body.message).toBe("Insufficent Balance");
-            })
-            
-            it("successfull transfer (start)", async () => {
-                const transaction = { amount: 100, reciever_account_number:user2.account }
-                const response = await request(defaultserver)
-                    .patch("/api/v1/transaction/")
-                    .send(transaction)
-                    .set("Accept", "application/json")
-                    .set("Authorization", `Bearer ${token}`)
-                expect(response.body.message).toBe("Enter pin to complete transaction");
-            })
-    
-            it("successfull transfer with wrong pin (finish)", async () => {
-                const data = { pin: 12344 }
-                const response = await request(defaultserver)
-                    .patch("/api/v1/transaction?complete=true")
-                    .send(data)
-                    .set("Accept", "application/json")
-                    .set("Authorization", `Bearer ${token}`)
-                expect(response.body.message).toBe("incorrect pin");
-            })
-            it("successfull transfer (finish)", async () => {
-                const data = { pin: 1234 }
-                const response = await request(defaultserver)
-                    .patch("/api/v1/transaction?complete=true")
-                    .send(data)
-                    .set("Accept", "application/json")
-                    .set("Authorization", `Bearer ${token}`)
-                expect(response.body.message).toBe("Transfer Completed");
-            })
-
+            expect(response.body.message).toBe("amount too low");
         })
+
+        it("transfer exact balance", async () => {
+            const transaction = { amount: 1000, reciever_account_number: user2.account }
+            const response = await request(defaultserver)
+                .patch("/api/v1/transaction/")
+                .send(transaction)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("Insufficent Balance");
+        })
+
+        it("successfull transfer (start)", async () => {
+            const transaction = { amount: 100, reciever_account_number: user2.account }
+            const response = await request(defaultserver)
+                .patch("/api/v1/transaction/")
+                .send(transaction)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("Enter pin to complete transaction");
+        })
+
+        it("successfull transfer with wrong pin (finish)", async () => {
+            const data = { pin: 12344 }
+            const response = await request(defaultserver)
+                .patch("/api/v1/transaction?complete=true")
+                .send(data)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("incorrect pin");
+        })
+        it("successfull transfer (finish)", async () => {
+            const data = { pin: 1234 }
+            const response = await request(defaultserver)
+                .patch("/api/v1/transaction?complete=true")
+                .send(data)
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("Transfer Completed");
+        })
+    })
+    describe("logout", () => {
+        it("logout user", async () => {
+            const response = await request(defaultserver)
+                .get("/api/v1/logout")
+                .set("Accept", "application/json")
+                .set("Authorization", `Bearer ${token}`)
+            expect(response.body.message).toBe("logout");
+        })
+    })
 
 
     afterAll(async () => {

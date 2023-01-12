@@ -221,14 +221,16 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
 })
 
 const checkUserBalance = (async (req: Request, res: Response) => {
-    const { id } = req.query
+    const { self } = req.query
     let wallet;
+    console.log(self);
+    
     try {
-        if (id) {
-            wallet = Wallet.query().findOne("user_id", res.locals.userCredential.id)
+        if (self) {
+            wallet = Wallet.query().select("account_number").findOne("user_id", res.locals.userCredential.id)
         }
         else {
-            wallet = Wallet.query().where("user_id", res.locals.userCredential.id)
+            wallet = Wallet.query().select("account_number")
         }
         return res.status(200).json(wallet)
     }
