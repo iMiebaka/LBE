@@ -100,7 +100,7 @@ The database used is MySQL. And here is the relationship diagram.
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
 The database contains the following tables and fields.
-#### hot_data table 📋
+#### hot_wire_transaction table 📋
 > This table gets all pending transactions during transfer and withdrawal
 
 #### statement table 📋
