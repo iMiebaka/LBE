@@ -16,7 +16,7 @@
 
 ## About <a name = "about"></a> 🏦
 
-Demo Credit is a consumable API platform that lets you created a financial future. On Demo Credit you can: create an account with zero charges 😮, transfer funds, and withdraw funds with zero delays. Th platform comes with high-level security, to make sure your funds are 💯 percent secured.
+Demo Credit is a consumable API platform that lets you create a financial future. On Demo Credit you can: create an account with zero charges, transfer funds, and withdraw funds with zero delays. The platform comes with high-level security, to make sure your funds are 💯 percent secured.
 
 [Checkout API documentation](https://democredit-e88v.onrender.com)
 ## Tools  <a name = "tools"></a> ⚒️
@@ -43,10 +43,9 @@ The platform is heavily baked on the following tools:
 </div>
 
 ## Getting Started <a name = "getting_started"></a> 🏁
+These instructions will guide you on how to get this project up and running.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
-
-## Prerequisites 🖋️
+## Prerequisites 
 
 To run this project in development, you need node install
 This project was done using v16.13.1 but any other LTS should do.
@@ -62,10 +61,9 @@ You also need a package manager like npm [See guide if not installed](https://do
 npm --version
 ```
 
-## Installing 💾
+## Installing 
 
 To get the code running locally, you need to clone it from the repo.
-
 > For SSH
 
 ```
@@ -78,18 +76,18 @@ git clone git@github.com:iMiebaka/LBE.git
 git clone https://github.com/iMiebaka/LBE.git
 ```
 
-Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the neccesary dependancies 
+Now the code has been pulled to your local machine, You'll have to move inside the project directory and install the necessary dependencies. 
 ```sh
 cd LTS
 npm i
 ```
 
 ## Environment Variable Setup 👁️ <a name = "env"></a>
-Now the dependencies are installed, it's time to set up environmental variables Inside the project folder is a file called: 
+Now the dependencies are installed, it's time to set up environmental variables Inside the project folder is a file called:
 > .env.example
 
 That file contains the sample data required by this project
-The env variables required are: secret key and database configuration
+The env variables required are: the secret key and database configuration
  <!-- and email(optional) -->
 ###### Secret key
 This is private to the server. It's a lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
@@ -100,41 +98,42 @@ To set up email you'll need the SMTP hostname, username and password -->
 [See folder structure for more insight](https://github.com/iMiebaka/LBE/blob/master/.env.development)
 
 
-## Database <a name = "database"></a> 🏁
+## Database <a name = "database"></a> 🛢️
+The database used is MySQL. This is the relationship diagram.
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
-The database is MySQL. The database contains the following tables and fields
+The database contains the following tables and fields.
 #### hot_data table 📋
-> This table get all pending transactions during transfer and withdrawal
+> This table gets all pending transactions during transfer and withdrawal
 
 #### statement table 📋
-> This table give a describive information about a completed transaction
+> This table gives descriptive information about completed transaction
 
 #### users table 📋
->This table contains valuable details about the user. This details are gone when the account is created. i.e fist name, last name, email, password and pin (Default to 1234)
+>This table contains valuable details about the user. These details are added when the account is created. i.e first name, last name, email, password and pin (Default to 1234)
 #### wallet table 📋
-> This table is automatically generated when a user signs up on the platform, details. Details include: account name, amount, user reference
+> This table automatically generates when a user signs up on the platform. Details include: account number, amount (Default to 0.0), user reference
 
-The two tables below are alias tables to help with data migrations
+NB: Knex generates two tables extra alias tables to help with data migrations
 knex_migrations
 knex_migrations_lock
 
-Next, we need to migrate the table for test database. <span style="color:red"> Make sure your change NODE_ENV to test </span>
+Next, we need to migrate the tables to the database <span style="color:red"> Make sure your set NODE_ENV </span>
 ```sh
 npm run migrate
 ```
-Next, we need to make those tables available for the database. Here is the command to make the migrations. <span style="color:red"> To make this migration, you need to ensure the NODE_ENV is set to development. </span>. Now that's done, you can re-run the previous command.
-
 
 ## Testing <a name = "test"></a> 🧪
-To test the workings of the project run this command
+This project testing is broken into two stages: One is to test database connection. and the other to test the user activities.
+The first test check if the database connection is established, this is important because without it data persistence cannot work.
+The second test creates two tests the user account, log in, funds the wallet, withdraw amounts, and transfer funds. This test depends on the success of the first test.
 ```sh
 npm test
 ```
 
 ## Starting the Server 🌐
 
-If your test works fine, you can now run the commannd. To get the code running locally, run the following script.
+If your test works fine, you can now run the command. To get the code running locally, run the following script.
 
 ```
 npm run dev
