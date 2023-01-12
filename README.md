@@ -11,7 +11,7 @@
 - [Environment Varaibles Setup](#env)
 - [Test](#test)
 <!-- - [OTP code](#otp) -->
-- [Contributor](#contributor)
+- [Author](#contributor)
 
 ## About <a name = "about"></a> 🏦
 
@@ -146,5 +146,5 @@ npm run dev
 
 > The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production. -->
 
-## Contributor <a name = "contributor"></a> 👨‍💻️
+## Author <a name = "contributor"></a> 👨‍💻️
 [Miebaka Iwarri](https://github.com/iMiebaka)
