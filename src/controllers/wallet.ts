@@ -223,13 +223,14 @@ const checkUserWallet = (async (req: Request, res: Response) => {
 
     try {
         if (self) {
-            wallet = await Wallet.query().select("account_number").findOne("user_id", res.locals.userCredential.id)
+            wallet = await User.query().select("first_name", "last_name").findById(res.locals.userCredential.id)
+                .withGraphFetched("wallet_self")
         }
         else {
-            wallet = await Wallet.query().select("account_number")
+            wallet = await User.query().select("first_name", "last_name")
+                .withGraphFetched("wallet")
         }
 
-        
         return res.status(200).json(wallet)
     }
     catch (err: any) {

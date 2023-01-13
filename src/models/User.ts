@@ -11,22 +11,32 @@ class User extends Model {
   email!: string;
   created_at!: Date;
   updated_at!: Date;
-  
+
   static get tableName() {
     return 'users';
   }
 
-    static get relationMappings() {
-      return {
-        channel: {
-          relation: Model.BelongsToOneRelation,
-          modelClass: Wallet,
-          join: {
-            from: 'user.user_id',
-            to: 'user.id',
-          },
+  static get relationMappings() {
+    return {
+      wallet: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Wallet,
+        filter: (query: any) => query.select('account_number'),
+        join: {
+          from: 'users.id',
+          to: 'wallet.user_id',
         },
-      };
-    }
+      },
+      wallet_self: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Wallet,
+        filter: (query: any) => query.select('account_number', 'amount'),
+        join: {
+          from: 'users.id',
+          to: 'wallet.user_id',
+        },
+      },
+    };
+  }
 }
 export default User;
