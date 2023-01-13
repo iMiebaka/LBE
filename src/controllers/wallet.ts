@@ -223,11 +223,13 @@ const checkUserWallet = (async (req: Request, res: Response) => {
 
     try {
         if (self) {
-            wallet = Wallet.query().select("account_number").findOne("user_id", res.locals.userCredential.id)
+            wallet = await Wallet.query().select("account_number").findOne("user_id", res.locals.userCredential.id)
         }
         else {
-            wallet = Wallet.query().select("account_number")
+            wallet = await Wallet.query().select("account_number")
         }
+
+        
         return res.status(200).json(wallet)
     }
     catch (err: any) {

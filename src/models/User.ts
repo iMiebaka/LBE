@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import Wallet from './Wallet';
 
 class User extends Model {
   id!: string
@@ -15,18 +16,17 @@ class User extends Model {
     return 'users';
   }
 
-  //   static get relationMappings() {
-  //     const Channel = require('./channel');
-  //     return {
-  //       channel: {
-  //         relation: Model.BelongsToOneRelation,
-  //         modelClass: Channel,
-  //         join: {
-  //           from: 'user.channelId',
-  //           to: 'channel.id',
-  //         },
-  //       },
-  //     };
-  //   }
+    static get relationMappings() {
+      return {
+        channel: {
+          relation: Model.BelongsToOneRelation,
+          modelClass: Wallet,
+          join: {
+            from: 'user.user_id',
+            to: 'user.id',
+          },
+        },
+      };
+    }
 }
 export default User;
