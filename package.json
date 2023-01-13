@@ -10,7 +10,8 @@
     "dev": "nodemon src/index.ts",
     "knex": "env $(cat .env) ./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
     "make-init": "npx knex migrate:make init --knexfile ./src/database/knexfile.ts",
-    "migrate": "env $(cat .env) npx knex migrate:latest --knexfile ./src/database/knexfile.ts",
+    "dev-migrate": "env $(cat .env) npx knex migrate:latest --knexfile ./src/database/knexfile.ts",
+    "migrate": "npx knex migrate:latest --knexfile ./src/database/knexfile.ts",
     "down": "env $(cat .env) npx knex migrate:down --knexfile ./src/database/knexfile.ts"
   },
   "author": "Miebaka Iwarri",
