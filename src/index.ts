@@ -4,14 +4,10 @@ import { config, logger, defaultConnect } from "./config";
 const NAMESPACE = "Server"
 
 const app = defaultConnect()
-// import express, { Application } from "express"
-// import { apiV1 } from "./routes"
-// // import "./contrab";
-// // import "../database/db"
 
-// const app: Application = express();
-// app.use(express.json())
-// app.use("/api/v1", apiV1);
+app.use("/", (req, res) => {
+    res.redirect("https://documenter.getpostman.com/view/22454995/2s8Z76vp4J")
+});
 
 
 
