@@ -8,7 +8,7 @@
 - [Tools](#tools)
 - [Getting Started](#getting_started)
 - [Database](#database)
-- [Environment Varaibles Setup](#env)
+- [Environment Variables Setup](#env)
 - [Test](#test)
 <!-- - [OTP code](#otp) -->
 - [Contributor](#contributor)
@@ -17,10 +17,12 @@
 
 Demo Credit is a consumable API platform that lets you create a financial future. On Demo Credit you can: create an account with zero charges, transfer funds, and withdraw funds with zero delays. The platform comes with high-level security, to make sure your funds are 💯 percent secured.
 
-[Checkout API documentation](https://demo-credit-nzo5.onrender.com)
+[Checkout API documentation](https://demo-credit-ngqh.onrender.com/)
 ## Tools  <a name = "tools"></a> ⚒️
-The platform is heavily baked on the following tools:
-
+The platform is heavily based on the following tools:
+   
+      
+      
 <div style="display: flex; align-items: center">
 <img src="https://knexjs.org/knex-logo.png" width="40"/> <b style="margin-left: 10px"> 
 
@@ -79,7 +81,7 @@ cd LTS
 npm i
 ```
 
-## Environment Variable Setup 👁️ <a name = "env"></a>
+## Environment Variable Setup  <a name = "env"></a>
 Now the dependencies are installed, it's time to set up environment variables Inside the project folder is a file called:
 > .env.example
 
@@ -87,7 +89,7 @@ That file contains the sample data required by this project
 The env variables required are: the secret key and database configuration
  <!-- and email(optional) -->
 ###### Secret key
-This is private to the server. It should be lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
+This is private to the server. It should be a lengthy combination of alpha-numeric characters to secure the platform. <span style="color:red"> This should not be disclosed ☠️</span>
 ###### Database
 The database will take in the host, username, port, password and database name
 <!-- ###### Email
@@ -115,14 +117,14 @@ NB: Knex generates two tables extra alias tables to help with data migrations
 knex_migrations
 knex_migrations_lock
 
-Next, we need to migrate the tables to the database. Use the command below. <span style="color:red"> Make sure your set NODE_ENV </span>
+Next, we need to migrate the tables to the database. Use the command below. <span style="color:red"> Make sure you set NODE_ENV </span>
 ```sh
 npm run migrate
 ```
 
 ## Testing <a name = "test"></a> 🧪
-This project testing is broken into two stages: One is to test database connection, and the other to test the user activities.
-The first test check if the database connection is established. This is important because without it data persistence cannot work.
+This project testing is broken into two stages: One is to test database connection, and the other test the user activities.
+The first test checks if the database connection is established. This is important because without it data persistence cannot work.
 The second test does the following: creates two tests user account, log in, funds the wallet, withdraw amounts, and transfer funds. This test depends on the success of the first test.
 To see the test in action run the command below:
 ```sh
