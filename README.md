@@ -11,7 +11,7 @@
 - [Environment Variables Setup](#env)
 - [Test](#test)
 <!-- - [OTP code](#otp) -->
-- [Contributor](#contributor)
+- [Author](#contributor)
 
 ## About <a name = "about"></a> 🏦
 
@@ -102,7 +102,7 @@ The database used is MySQL. And here is the relationship diagram.
 <img alt="database_relationship_image" align="center" src="https://github.com/iMiebaka/LBE/blob/master/datbase-relations.png?raw=true">
 
 The database contains the following tables and fields.
-#### hot_data table 📋
+#### hot_wire_transaction table 📋
 > This table gets all pending transactions during transfer and withdrawal
 
 #### statement table 📋
@@ -148,5 +148,5 @@ npm run dev
 
 > The OTP code will be displayed on the logs during development, and the code will be sent via registered email during production. -->
 
-## Contributor <a name = "contributor"></a> 👨‍💻️
+## Author <a name = "contributor"></a> 👨‍💻️
 [Miebaka Iwarri](https://github.com/iMiebaka)
