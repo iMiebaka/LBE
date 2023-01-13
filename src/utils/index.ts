@@ -1,7 +1,7 @@
-import { Wallet, User } from "../models";
+import { Wallet, User, HotWireTransaction } from "../models";
 
 import { config } from "../config"
-import { creditAlertStatement,debitAlertStatement, TEST_USER } from "./staticData";
+import { creditAlertStatement, debitAlertStatement, TEST_USER } from "./staticData";
 
 
 const TRANSACTION_LEVEL = {
@@ -18,8 +18,14 @@ const TRANSACTION_STATE = {
 const checkBalance = async (user: any, amount: number) => {
     const userInit = await Wallet.query().where("user_id", user)
     return calcultateIntrest(amount, userInit[0].amount)
-
 }
+
+const clearPending = async (user: any,) => {
+    await HotWireTransaction.query().where("user_id", user).where("status", TRANSACTION_STATE.PENDING).patch(
+        { status: TRANSACTION_STATE.TIMEOUT }
+    )
+}
+
 
 const checkUser = async (user: any, type: string) => {
     return await User.query().where(type, user)
@@ -31,7 +37,7 @@ const calcultateIntrest = (amount: number, total: number) => {
 }
 
 export {
-    checkBalance, checkUser,
+    checkBalance, checkUser, clearPending,
     debitAlertStatement,
     creditAlertStatement,
     TRANSACTION_LEVEL,

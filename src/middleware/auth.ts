@@ -18,11 +18,10 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
     // decrypt the token
     if (bearerHearder != "") {
       const publicId: any = jwt.verify(bearerHearder!, config.SECRET_KEY);
-      const user = await User.query().select().where("public_id", publicId.user);
-      console.log(user.length);
-      if (user.length !== 1)
+      const user = await User.query().findOne("public_id", publicId.user);
+      if (typeof user != "object")
         return res.status(403).json({ message: "Login Reqired" });
-      res.locals.userCredential = user[0];
+      res.locals.userCredential = user;
       next();
       // console.log(user, " User");
     } else {
