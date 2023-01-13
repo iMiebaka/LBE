@@ -217,7 +217,7 @@ const withdrawAccount = (async (req: Request, res: Response, next: NextFunction)
     }
 })
 
-const checkUserBalance = (async (req: Request, res: Response) => {
+const checkUserWallet = (async (req: Request, res: Response) => {
     const { self } = req.query
     let wallet;
 
@@ -237,4 +237,4 @@ const checkUserBalance = (async (req: Request, res: Response) => {
 })
 
 
-export { creditAccount, transferAccount, withdrawAccount, checkUserBalance }
+export { creditAccount, transferAccount, withdrawAccount, checkUserWallet }

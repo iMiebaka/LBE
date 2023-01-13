@@ -5,7 +5,7 @@ const NAMESPACE = "Server"
 
 const app = defaultConnect()
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     res.redirect("https://documenter.getpostman.com/view/22454995/2s8Z76vp4J")
 });
 

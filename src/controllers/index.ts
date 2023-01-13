@@ -1,8 +1,8 @@
 import { createUserPost, loginUserGet, loginUserPut } from "./auth"
-import { checkUserBalance, creditAccount, transferAccount, withdrawAccount } from "./wallet";
+import { checkUserWallet, creditAccount, transferAccount, withdrawAccount } from "./wallet";
 
 export {
-    checkUserBalance,
+    checkUserWallet,
     createUserPost, loginUserGet, loginUserPut,
     creditAccount, transferAccount, withdrawAccount
 }
