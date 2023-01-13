@@ -119,8 +119,9 @@ knex_migrations_lock
 
 Next, we need to migrate the tables to the database. Use the command below. <span style="color:red"> Make sure you set NODE_ENV </span>
 ```sh
-npm run migrate
+npm run dev-migrate
 ```
+NB: This script is for development 
 
 ## Testing <a name = "test"></a> 🧪
 This project testing is broken into two stages: One is to test database connection, and the other test the user activities.
