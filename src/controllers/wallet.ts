@@ -15,9 +15,11 @@ const creditAccount = (async (req: Request, res: Response, next: NextFunction) =
     try {
         if (+amount < 1) return res.status(400).json({ message: "Credit amount less than 1" });
         const previousAcount = await Wallet.query().select().findOne("user_id", res.locals.userCredential.id)
+        
         if (previousAcount != undefined) {
+            const senderBalance = +((+amount) + previousAcount.amount).toFixed(2)
             await Wallet.query().select().where("user_id", res.locals.userCredential.id).patch({
-                amount: (+amount) + previousAcount.amount
+                amount: senderBalance
             })
             await Statement.query().insert({
                 id: v4(),
